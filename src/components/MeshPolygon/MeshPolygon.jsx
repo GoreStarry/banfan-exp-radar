@@ -7,59 +7,95 @@ import React, {
 } from "react";
 import PropTypes from "prop-types";
 import * as THREE from "three";
-import { HTML } from "@react-three/drei";
+
 import Two from "two.js";
 
 import CusLine from "../CusLine";
+import CenterLines from "./CenterLines";
+import SpriteText from "../SpriteText";
+import Labels from "./Labels";
 
-import sty from "../BgRadarChart/BgRadarChart.module.scss";
+// import sty from "../BgRadarChart/BgRadarChart.module.scss";
 
-const MeshPolygon = ({
-  centerPoint = [0, 0, 0],
-  numPolygonSide,
-  lengthRadius = 1,
-  color = "aqua",
+const MeshPolygon = React.memo(
+  ({
+    centerPoint = [0, 0, 0],
+    numPolygonSide,
+    lengthRadius = 1,
+    color,
 
-  isCenterLineDisplay = false,
+    isCenterLineDisplay = false,
 
-  isOutlineMode = false,
-  outlineColor = "black",
-  centerLineColor = outlineColor,
-  outOutlineStrokeWidth = 1,
-  isOutlineDashMode = false,
-  isThinLineMode = true,
-  labelList,
-  ...restProps
-}) => {
-  const twoPolygon = useMemo(() => {
-    const twoPolygon = new Two.Polygon(
-      centerPoint.x,
-      centerPoint.y,
-      lengthRadius,
-      numPolygonSide
-    );
-    return twoPolygon;
-  }, [numPolygonSide, lengthRadius]);
+    isOutlineMode = false,
+    outlineColor,
+    centerOutLineColor,
+    outOutlineStrokeWidth = 1,
+    isOutlineDashMode = false,
+    isThinLineMode = true,
+    labelList,
+    fontColor,
+    textHeight,
+    textStrokeWidth,
+    textStrokeColor,
+    offsetY,
+    ...restProps
+  }) => {
+    const twoPolygon = useMemo(() => {
+      const twoPolygon = new Two.Polygon(
+        centerPoint[0],
+        centerPoint[1],
+        lengthRadius,
+        numPolygonSide
+      );
+      return twoPolygon;
+    }, [numPolygonSide, lengthRadius]);
 
-  const shape = useMemo(() => {
-    const shape = new THREE.Shape();
-    shape.autoClose = true;
-    twoPolygon._collection.forEach(({ x, y }, index) => {
-      const target = [centerPoint[0] + x, centerPoint[1] + y];
-      index === 0 ? shape.moveTo(...target) : shape.lineTo(...target);
-    });
+    const shape = useMemo(() => {
+      const shape = new THREE.Shape();
+      shape.autoClose = true;
 
-    return shape;
-  }, [twoPolygon]);
+      twoPolygon._collection.forEach(({ x, y }, index) => {
+        const [xRotated, yRotate] = rotate(
+          centerPoint[0],
+          centerPoint[1],
+          x,
+          y,
+          180 / numPolygonSide
+        );
 
-  const points = useMemo(() => {
-    return shape.getPoints();
-  }, [shape]);
+        const target = [xRotated, yRotate];
+        index === 0 ? shape.moveTo(...target) : shape.lineTo(...target);
+      });
 
-  return (
-    shape && (
-      <group {...restProps}>
-        <group rotation={[0, 0, -Math.PI / numPolygonSide]}>
+      return shape;
+    }, [twoPolygon]);
+
+    const points = useMemo(() => {
+      return shape.getPoints();
+    }, [shape]);
+
+    const [textAlignList, verticalAlignList] = useMemo(() => {
+      const centerIndex =
+        (points.length - 2) / // 2 is extra points
+        2;
+
+      return [
+        points.map((nulll, index) =>
+          index === 0 || index === centerIndex
+            ? "center"
+            : index < centerIndex
+            ? "right"
+            : "left"
+        ),
+        points.map((nulll, index) =>
+          index === 0 ? "bottom" : index === centerIndex ? "top" : "center"
+        ),
+      ];
+    }, [points]);
+
+    return (
+      shape && (
+        <group {...restProps}>
           {!isOutlineMode && (
             <mesh>
               <shapeBufferGeometry args={[shape]} />
@@ -75,32 +111,32 @@ const MeshPolygon = ({
             isThinLineMode={isThinLineMode}
           />
 
-          {isCenterLineDisplay &&
-            points.map((endPoint, index) => {
-              const newPoints = [
-                { x: centerPoint[0], y: centerPoint[1], z: centerPoint[2] },
-                endPoint,
-              ];
+          {isCenterLineDisplay && (
+            <CenterLines
+              points={points}
+              centerPoint={centerPoint}
+              offsetY={offsetY}
+              color={centerOutLineColor || outlineColor}
+            />
+          )}
 
-              return (
-                <>
-                  <CusLine
-                    key={`center-${index}`}
-                    points={newPoints}
-                    isThinLineMode={true}
-                    color={centerLineColor}
-                  />
-                  <HTML center position={[endPoint.x, endPoint.y, endPoint.z]}>
-                    <div className={sty.label}>{labelList[index]}</div>
-                  </HTML>
-                </>
-              );
-            })}
+          {isCenterLineDisplay && (
+            <Labels
+              points={points}
+              color={fontColor}
+              textHeight={textHeight}
+              strokeWidth={textStrokeWidth}
+              strokeColor={textStrokeColor}
+              textAlignList={textAlignList}
+              verticalAlignList={verticalAlignList}
+              labelList={labelList}
+            />
+          )}
         </group>
-      </group>
-    )
-  );
-};
+      )
+    );
+  }
+);
 
 MeshPolygon.propTypes = {
   centerPoint: PropTypes.array,
@@ -113,5 +149,14 @@ MeshPolygon.propTypes = {
   labelList: PropTypes.array,
   renderExtendComponent: PropTypes.func,
 };
+
+function rotate(cx, cy, x, y, angle) {
+  var radians = (Math.PI / 180) * angle,
+    cos = Math.cos(radians),
+    sin = Math.sin(radians),
+    nx = cos * (x - cx) + sin * (y - cy) + cx,
+    ny = cos * (y - cy) - sin * (x - cx) + cy;
+  return [nx, ny];
+}
 
 export default MeshPolygon;

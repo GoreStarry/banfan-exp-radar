@@ -9,7 +9,14 @@ const CusLine = ({
   isOutlineDashMode,
   lineWidth = 1,
 }) => {
-  const onUpdate = useCallback((self) => self.setFromPoints(points), [points]);
+  const onUpdate = useCallback(
+    (self) =>
+      self.setFromPoints(
+        points
+        // points.map(({ x, y, z }) => ({ x, y, z: z + 0.1 }))
+      ),
+    [points]
+  );
 
   return isThinLineMode ? (
     <line>
