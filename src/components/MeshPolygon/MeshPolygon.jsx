@@ -7,9 +7,9 @@ import React, {
 } from "react";
 import PropTypes from "prop-types";
 import * as THREE from "three";
-
 import Two from "two.js";
 
+import rotatePoint from "../../utils/rotatePoint.js";
 import CusLine from "../CusLine";
 import CenterLines from "./CenterLines";
 import SpriteText from "../SpriteText";
@@ -55,7 +55,7 @@ const MeshPolygon = React.memo(
       shape.autoClose = true;
 
       twoPolygon._collection.forEach(({ x, y }, index) => {
-        const [xRotated, yRotate] = rotate(
+        const [xRotated, yRotate] = rotatePoint(
           centerPoint[0],
           centerPoint[1],
           x,
@@ -99,8 +99,12 @@ const MeshPolygon = React.memo(
           {!isOutlineMode && (
             <mesh>
               <shapeBufferGeometry args={[shape]} />
-              <meshBasicMaterial color={color} />
-              {/* <meshPhongMaterial color="red" side={THREE.DoubleSide} /> */}
+              <meshBasicMaterial
+                color={color}
+                side={THREE.DoubleSide}
+                transparent={true}
+                blending={THREE.MultiplyBlending}
+              />
             </mesh>
           )}
 
@@ -149,14 +153,5 @@ MeshPolygon.propTypes = {
   labelList: PropTypes.array,
   renderExtendComponent: PropTypes.func,
 };
-
-function rotate(cx, cy, x, y, angle) {
-  var radians = (Math.PI / 180) * angle,
-    cos = Math.cos(radians),
-    sin = Math.sin(radians),
-    nx = cos * (x - cx) + sin * (y - cy) + cx,
-    ny = cos * (y - cy) - sin * (x - cx) + cy;
-  return [nx, ny];
-}
 
 export default MeshPolygon;

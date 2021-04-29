@@ -23,6 +23,7 @@ const BgRadarChart = ({
   centerOutLineColor,
   labelList,
   offsetY,
+  lengthRadius,
 }) => {
   return (
     <group>
@@ -38,6 +39,7 @@ const BgRadarChart = ({
         outlineColor={outlineColor}
         centerOutLineColor={centerOutLineColor}
         offsetY={offsetY}
+        lengthRadius={lengthRadius}
       />
       {[...Array(numLayer)].map((nulll, index) => {
         const scaleSize = index / numLayer;
@@ -55,6 +57,7 @@ const BgRadarChart = ({
               (offsetY / (numLayer - 1)) * (numLayer - index) * 1.1,
             ]}
             outlineColor={outlineColor}
+            lengthRadius={lengthRadius}
           />
         );
       })}

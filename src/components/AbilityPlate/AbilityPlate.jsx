@@ -12,7 +12,14 @@ import { useSprings } from "react-spring/three";
 import sty from "./AbilityPlate.module.scss";
 
 const AbilityPlate = React.memo(
-  ({ data, maxValue, color = "red", outlineColor, ...restProps }) => {
+  ({
+    data,
+    maxValue,
+    color = "red",
+    outlineColor,
+    lengthRadius,
+    ...restProps
+  }) => {
     const refShapeFactor = useRef();
     const refShapePoints = useRef(
       [...Array(data.length)].map(() => ({ x: 0, y: 0 }))
@@ -57,8 +64,8 @@ const AbilityPlate = React.memo(
 
         return {
           delay: index * 80,
-          x: targetValue * Math.cos(targetAngle),
-          y: targetValue * Math.sin(targetAngle),
+          x: lengthRadius * targetValue * Math.cos(targetAngle),
+          y: lengthRadius * targetValue * Math.sin(targetAngle),
         };
       });
     }, []);
@@ -84,10 +91,10 @@ const AbilityPlate = React.memo(
           <mesh>
             {shape && <shapeBufferGeometry args={[shape]} />}
             <meshBasicMaterial
+              side={THREE.DoubleSide}
               color={color}
               transparent={true}
               blending={THREE.MultiplyBlending}
-              outlineColor={outlineColor}
             />
           </mesh>
         </group>

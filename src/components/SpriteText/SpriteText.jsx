@@ -241,8 +241,6 @@ const SpriteText = React.memo(
       ],
     };
 
-    console.log(canvas);
-
     return (
       <sprite scale={scale} position={positionMap[textAlign]} {...restProps}>
         <spriteMaterial attach="material" transparent alphaTest={0.5}>

@@ -9,12 +9,14 @@ import * as THREE from "three";
 import PropTypes from "prop-types";
 import { Canvas } from "react-three-fiber";
 // import * as THREE from "three";
-import { OrbitControls } from "@react-three/drei";
 import canvasToImage from "canvas-to-image";
+import _ from "lodash";
+// import { OrbitControls } from "@react-three/drei/OrbitControls";
 
 import AbilityPlate from "../components/AbilityPlate";
 import BgRadarChart from "../components/BgRadarChart";
 import SpriteText from "../components/SpriteText";
+import Camera from "../components/Camera";
 
 import sty from "./ThreeRadarChart.module.scss";
 
@@ -45,14 +47,40 @@ const ThreeRadarChart = ({
   abilityPlateBgColor = "#aac3e0",
   abilityPlateColor = "red",
   offsetY = 0.3,
+  focusPointIndex = false,
+  isAutoDetectFocusPointIndex = true,
+
   ...restProps
 }) => {
   const labelList = useMemo(() => data.map(({ name }) => name), [data]);
   const refCanvas = useRef();
+  const refCacheData = useRef();
 
   const saveImage = useCallback(() => {
     canvasToImage(refCanvas.current, nameSavedImage);
   }, []);
+
+  const autoDetectFocusPointIndex = useMemo(() => {
+    if (!refCacheData.current) {
+      refCacheData.current = data;
+      return false;
+    }
+
+    if (isAutoDetectFocusPointIndex) {
+      const diffIndex = data.findIndex((item, index) => {
+        console.log(Object.keys(difference(item, refCacheData.current[index])));
+        return (
+          Object.keys(difference(item, refCacheData.current[index])).length !==
+          0
+        );
+      });
+      refCacheData.current = data;
+
+      return diffIndex === -1 ? false : diffIndex;
+    } else {
+      return false;
+    }
+  }, [data]);
 
   useEffect(() => {
     if (isTriggerSaveImage) {
@@ -72,12 +100,15 @@ const ThreeRadarChart = ({
     []
   );
 
+  const numAbility = data.length < 3 ? 3 : data.length;
+  console.log(autoDetectFocusPointIndex);
   return (
     <div
       className={sty.ThreeRadarChart}
       // onClick={saveImage}
     >
       <Canvas
+        //  shadows
         key={canvasBgColor}
         width="300px"
         height="300px"
@@ -94,7 +125,7 @@ const ThreeRadarChart = ({
         </SpriteText>
         <group rotation={[-Math.PI / 100, -Math.PI / 100, 0]}>
           <BgRadarChart
-            numAbility={data.length < 3 ? 3 : data.length}
+            numAbility={numAbility}
             numLayer={maxValue}
             color={abilityPlateBgColor}
             outlineColor={outlineColor}
@@ -105,6 +136,7 @@ const ThreeRadarChart = ({
             textStrokeColor={textStrokeColor}
             labelList={labelList}
             offsetY={offsetY}
+            lengthRadius={lengthRadius}
           />
           <AbilityPlate
             data={data}
@@ -112,10 +144,18 @@ const ThreeRadarChart = ({
             color={abilityPlateColor}
             outlineColor={outlineColor}
             position={positionAbilityPlate}
+            lengthRadius={lengthRadius}
           />
         </group>
         {children}
-        {control && <OrbitControls />}
+        <Camera
+          focusPointIndex={autoDetectFocusPointIndex || focusPointIndex}
+          control={control}
+          numAbility={numAbility}
+          lengthRadius={lengthRadius}
+          centerPoint={centerPoint}
+        />
+        {/* {control && <OrbitControls />} */}
       </Canvas>
     </div>
   );
@@ -137,6 +177,18 @@ ThreeRadarChart.propTypes = {
   outlineColor: PropTypes.string,
   abilityPlateBgColor: PropTypes.string,
   abilityPlateColor: PropTypes.string,
+  focusPointIndex: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
 };
 
 export default ThreeRadarChart;
+
+function difference(object, base) {
+  return _.transform(object, (result, value, key) => {
+    if (!_.isEqual(value, base[key])) {
+      result[key] =
+        _.isObject(value) && _.isObject(base[key])
+          ? difference(value, base[key])
+          : value;
+    }
+  });
+}
