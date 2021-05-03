@@ -1,30 +1,34 @@
 import React, { useRef, useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
-import SpriteText from "../../SpriteText";
+import Label from "../Label";
 
 const Labels = React.memo(
   ({
     points,
-    color,
     textAlignList,
     verticalAlignList,
     labelList,
+    // mode,
+    // onChangeInputLabel,
+    // labelMode,
+    // color,
+    // setCanvasCursor,
+    // setCanvasCursorAsDefault,
     ...restProps
   }) => {
-    return points.map((endPoint, index) => {
+    // console.log(points, labelList);
+    return labelList.map((labelText, index) => {
       return (
-        labelList[index] && (
-          <SpriteText
-            key={labelList[index]}
-            position={[endPoint.x, endPoint.y, endPoint.z]}
-            color={color}
-            textAlign={textAlignList[index]}
-            verticalAlign={verticalAlignList[index]}
-            {...restProps}
-          >
-            {labelList[index]}
-          </SpriteText>
-        )
+        <Label
+          key={index}
+          index={index}
+          position={[points[index].x, points[index].y, 0]}
+          text={labelText}
+          textAlign={textAlignList[index]}
+          verticalAlign={verticalAlignList[index]}
+          isLastLabel={labelList.length === index + 1}
+          {...restProps}
+        />
       );
     });
   }

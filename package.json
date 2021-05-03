@@ -28,15 +28,17 @@
     "patch": "npm version patch --no-git-tag-version"
   },
   "dependencies": {
-    "@react-three/drei": "2.2.0",
+    "@react-spring/three": "^9.1.2",
+    "@react-three/drei": "4.3.2",
+    "@react-three/fiber": "6.0.13",
     "canvas-to-image": "^2.2.0",
     "lodash": "^4.17.21",
-    "react-spring": "^9.0.0-rc.3",
-    "react-three-fiber": "5.0.6",
-    "react-three-gui": "0.3.1",
-    "three": "0.121.1",
+    "react-input-autosize": "theruther4d/react-input-autosize#fix-thrashing-on-mount-with-raf",
+    "react-three-gui": "0.4.2",
+    "three": "0.128.0",
     "three-spritetext": "^1.6.2",
-    "two.js": "^0.7.1"
+    "two.js": "^0.7.5",
+    "zustand": "^3.4.2"
   },
   "peerDependencies": {},
   "devDependencies": {

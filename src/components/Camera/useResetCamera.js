@@ -5,7 +5,7 @@ import React, {
   useCallback,
   useEffect,
 } from "react";
-import { useSpring } from "react-spring/three";
+import { useSpring } from "@react-spring/three";
 
 export default function useResetCamera({
   defaultPosition = [0, 1, 0],
@@ -24,16 +24,15 @@ export default function useResetCamera({
         ],
       },
       to: { position: resetPosition },
-      onChange: ({ position }) => {
-        console.log(position);
+      onChange: ({ value: { position } }) => {
         refCamera.current.position.set(...position);
         refControls.current.update();
       },
       onStart: () => {
-        refControls.current.enabled = false;
+        // refControls.current.enabled = false;
       },
       onRest: () => {
-        refControls.current.enabled = true;
+        // refControls.current.enabled = true;
       },
     });
   };

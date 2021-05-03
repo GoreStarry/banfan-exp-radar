@@ -24,6 +24,10 @@ const BgRadarChart = ({
   labelList,
   offsetY,
   lengthRadius,
+  labelMode,
+  onChangeInputLabel,
+  setCanvasCursor,
+  setCanvasCursorAsDefault,
 }) => {
   return (
     <group>
@@ -40,6 +44,10 @@ const BgRadarChart = ({
         centerOutLineColor={centerOutLineColor}
         offsetY={offsetY}
         lengthRadius={lengthRadius}
+        labelMode={labelMode}
+        onChangeInputLabel={onChangeInputLabel}
+        setCanvasCursor={setCanvasCursor}
+        setCanvasCursorAsDefault={setCanvasCursorAsDefault}
       />
       {[...Array(numLayer)].map((nulll, index) => {
         const scaleSize = index / numLayer;

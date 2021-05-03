@@ -6,11 +6,12 @@ import React, {
   useEffect,
 } from "react";
 import PropTypes from "prop-types";
-import { useThree, useFrame } from "react-three-fiber";
-import { PerspectiveCamera } from "@react-three/drei/PerspectiveCamera";
-import { OrbitControls } from "@react-three/drei/OrbitControls";
+import { useThree, useFrame } from "@react-three/fiber";
+import { PerspectiveCamera, OrbitControls } from "@react-three/drei";
 import Two from "two.js";
+import shallow from "zustand/shallow";
 
+import useStore from "../../store/useStore.js";
 import useResetCamera from "./useResetCamera.js";
 import rotatePoint from "../../utils/rotatePoint.js";
 
@@ -18,7 +19,7 @@ const Camera = React.memo(
   ({
     maxDistance = 10,
     minDistance = 0,
-    focusPointIndex,
+
     isPreloadDone = true,
     control,
     numAbility,
@@ -32,7 +33,17 @@ const Camera = React.memo(
     const startCameraPosition = [0, 0, 5];
     const defaultCameraPosition = [2.5, -2, 4];
 
-    const { setDefaultCamera } = useThree();
+    const { isClickOutLabel, isResetCamera, focusPointIndex } = useStore(
+      useCallback(
+        (state) => ({
+          isClickOutLabel: state.isClickOutLabel,
+          isResetCamera: state.isResetCamera,
+          focusPointIndex: state.focusPointIndex,
+        }),
+        []
+      ),
+      shallow
+    );
 
     const resetCamera = useResetCamera({
       defaultPosition: defaultCameraPosition,
@@ -40,7 +51,16 @@ const Camera = React.memo(
       refCamera,
     });
 
-    useEffect(() => void setDefaultCamera(refCamera.current), []);
+    useEffect(() => {
+      if (isClickOutLabel || isResetCamera) {
+        resetCamera();
+        useStore.setState({
+          isResetCamera: false,
+          focusPointIndex: false,
+        });
+      }
+      return () => {};
+    }, [isClickOutLabel, isResetCamera]);
 
     useEffect(() => {
       if (isPreloadDone) {
@@ -81,6 +101,7 @@ const Camera = React.memo(
       if (!didMount.current) {
         didMount.current = true;
       } else if (focusPointIndex !== false && listFocusPointPositionList) {
+        // console.log(focusPointIndex);
         resetCamera(listFocusPointPositionList[focusPointIndex]);
       }
       return () => {};
@@ -108,7 +129,7 @@ const Camera = React.memo(
 );
 
 Camera.propTypes = {
-  focusPointIndex: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
+  focusPointIndex: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   isPreloadDone: PropTypes.bool,
   numAbility: PropTypes.number,
   // isLoadingDone: PropTypes.bool,

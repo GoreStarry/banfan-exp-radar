@@ -7,15 +7,17 @@ import React, {
 } from "react";
 import * as THREE from "three";
 import PropTypes from "prop-types";
-import { Canvas } from "react-three-fiber";
+import { Canvas } from "@react-three/fiber";
 // import * as THREE from "three";
 import canvasToImage from "canvas-to-image";
 import _ from "lodash";
-// import { OrbitControls } from "@react-three/drei/OrbitControls";
 
+import useStore from "../store/useStore.js";
+import { Plane } from "@react-three/drei";
+
+import BgClickOut from "../components/BgClickOut";
 import AbilityPlate from "../components/AbilityPlate";
 import BgRadarChart from "../components/BgRadarChart";
-import SpriteText from "../components/SpriteText";
 import Camera from "../components/Camera";
 
 import sty from "./ThreeRadarChart.module.scss";
@@ -47,8 +49,10 @@ const ThreeRadarChart = ({
   abilityPlateBgColor = "#aac3e0",
   abilityPlateColor = "red",
   offsetY = 0.3,
-  focusPointIndex = false,
-  isAutoDetectFocusPointIndex = true,
+  // focusPointIndex = false,
+  // isAutoDetectFocusPointIndex = true,
+  labelMode = "editable",
+  onChangeInputLabel,
 
   ...restProps
 }) => {
@@ -56,31 +60,38 @@ const ThreeRadarChart = ({
   const refCanvas = useRef();
   const refCacheData = useRef();
 
+  const setCanvasCursor = useCallback(() => {
+    refCanvas.current.style.cursor = "pointer";
+  }, []);
+  const setCanvasCursorAsDefault = useCallback(() => {
+    refCanvas.current.style.cursor = "default";
+  }, []);
+
   const saveImage = useCallback(() => {
     canvasToImage(refCanvas.current, nameSavedImage);
   }, []);
 
-  const autoDetectFocusPointIndex = useMemo(() => {
-    if (!refCacheData.current) {
-      refCacheData.current = data;
-      return false;
-    }
+  // const autoDetectFocusPointIndex = useMemo(() => {
+  //   if (!refCacheData.current) {
+  //     refCacheData.current = data;
+  //     return false;
+  //   }
 
-    if (isAutoDetectFocusPointIndex) {
-      const diffIndex = data.findIndex((item, index) => {
-        console.log(Object.keys(difference(item, refCacheData.current[index])));
-        return (
-          Object.keys(difference(item, refCacheData.current[index])).length !==
-          0
-        );
-      });
-      refCacheData.current = data;
+  //   if (isAutoDetectFocusPointIndex) {
+  //     const diffIndex = data.findIndex((item, index) => {
+  //       // console.log(Object.keys(difference(item, refCacheData.current[index])));
+  //       return (
+  //         Object.keys(difference(item, refCacheData.current[index])).length !==
+  //         0
+  //       );
+  //     });
+  //     refCacheData.current = data;
 
-      return diffIndex === -1 ? false : diffIndex;
-    } else {
-      return false;
-    }
-  }, [data]);
+  //     return diffIndex === -1 ? false : diffIndex.toString();
+  //   } else {
+  //     return false;
+  //   }
+  // }, [data]);
 
   useEffect(() => {
     if (isTriggerSaveImage) {
@@ -101,10 +112,11 @@ const ThreeRadarChart = ({
   );
 
   const numAbility = data.length < 3 ? 3 : data.length;
-  console.log(autoDetectFocusPointIndex);
+  // console.log(autoDetectFocusPointIndex);
   return (
     <div
       className={sty.ThreeRadarChart}
+
       // onClick={saveImage}
     >
       <Canvas
@@ -120,10 +132,9 @@ const ThreeRadarChart = ({
         }}
         {...restProps}
       >
-        <SpriteText position={(0, 0, 0)} color="red">
-          123
-        </SpriteText>
         <group rotation={[-Math.PI / 100, -Math.PI / 100, 0]}>
+          <BgClickOut />
+
           <BgRadarChart
             numAbility={numAbility}
             numLayer={maxValue}
@@ -137,6 +148,11 @@ const ThreeRadarChart = ({
             labelList={labelList}
             offsetY={offsetY}
             lengthRadius={lengthRadius}
+            labelMode={labelMode}
+            onChangeInputLabel={onChangeInputLabel}
+            labelMode={labelMode}
+            setCanvasCursor={setCanvasCursor}
+            setCanvasCursorAsDefault={setCanvasCursorAsDefault}
           />
           <AbilityPlate
             data={data}
@@ -149,7 +165,7 @@ const ThreeRadarChart = ({
         </group>
         {children}
         <Camera
-          focusPointIndex={autoDetectFocusPointIndex || focusPointIndex}
+          // focusPointIndex={autoDetectFocusPointIndex || focusPointIndex}
           control={control}
           numAbility={numAbility}
           lengthRadius={lengthRadius}
@@ -162,6 +178,11 @@ const ThreeRadarChart = ({
 };
 
 ThreeRadarChart.propTypes = {
+  labelMode: PropTypes.oneOf([
+    "editable", // auto switch to input if click label
+    "edit", // input mode
+    "display", // canvas sprite
+  ]),
   isTriggerSaveImage: PropTypes.bool,
   onCompleteSaveImage: PropTypes.func,
   nameSavedImage: PropTypes.string,
@@ -172,6 +193,7 @@ ThreeRadarChart.propTypes = {
       value: PropTypes.number,
     })
   ),
+  onChangeInputLabel: PropTypes.func,
   canvasBgColor: PropTypes.string,
   fontColor: PropTypes.string,
   outlineColor: PropTypes.string,

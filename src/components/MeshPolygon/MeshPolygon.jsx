@@ -37,7 +37,11 @@ const MeshPolygon = React.memo(
     textHeight,
     textStrokeWidth,
     textStrokeColor,
+    labelMode,
+    onChangeInputLabel,
     offsetY,
+    setCanvasCursor,
+    setCanvasCursorAsDefault,
     ...restProps
   }) => {
     const twoPolygon = useMemo(() => {
@@ -134,6 +138,10 @@ const MeshPolygon = React.memo(
               textAlignList={textAlignList}
               verticalAlignList={verticalAlignList}
               labelList={labelList}
+              mode={labelMode}
+              onChangeInputLabel={onChangeInputLabel}
+              setCanvasCursor={setCanvasCursor}
+              setCanvasCursorAsDefault={setCanvasCursorAsDefault}
             />
           )}
         </group>

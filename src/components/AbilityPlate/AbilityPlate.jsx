@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import PropTypes from "prop-types";
 import * as THREE from "three";
-import { useSprings } from "react-spring/three";
+import { useSprings } from "@react-spring/three";
 
 import sty from "./AbilityPlate.module.scss";
 
@@ -80,7 +80,11 @@ const AbilityPlate = React.memo(
         return {
           x: 0,
           y: 0,
-          onRest: animateTransition(data),
+          onRest: () => {
+            setTimeout(() => {
+              animateTransition(data);
+            }, 300);
+          },
         };
       });
     }, [data]);

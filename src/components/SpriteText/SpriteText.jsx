@@ -267,7 +267,7 @@ SpriteText.propTypes = {
   borderRadius: PropTypes.number,
   borderColor: PropTypes.string,
   strokeWidth: PropTypes.number,
-  strokeColor: PropTypes.number,
+  strokeColor: PropTypes.string,
   fontFace: PropTypes.string,
   fontSize: PropTypes.number,
   fontWeight: PropTypes.string,
