@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import PropTypes from "prop-types";
 import * as THREE from "three";
-import { useSprings } from "@react-spring/three";
+import { useSprings } from "react-spring/three";
 
 import sty from "./AbilityPlate.module.scss";
 

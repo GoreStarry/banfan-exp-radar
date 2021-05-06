@@ -48,11 +48,12 @@ const ThreeRadarChart = ({
   centerOutLineColor,
   abilityPlateBgColor = "#aac3e0",
   abilityPlateColor = "red",
-  offsetY = 0.3,
+  offsetY = 0.2,
   // focusPointIndex = false,
   // isAutoDetectFocusPointIndex = true,
   labelMode = "editable",
   onChangeInputLabel,
+  onChangeValue,
 
   ...restProps
 }) => {
@@ -136,6 +137,7 @@ const ThreeRadarChart = ({
           <BgClickOut />
 
           <BgRadarChart
+            data={data}
             numAbility={numAbility}
             numLayer={maxValue}
             color={abilityPlateBgColor}
@@ -145,11 +147,11 @@ const ThreeRadarChart = ({
             textHeight={textHeight}
             textStrokeWidth={textStrokeWidth}
             textStrokeColor={textStrokeColor}
-            labelList={labelList}
             offsetY={offsetY}
             lengthRadius={lengthRadius}
             labelMode={labelMode}
             onChangeInputLabel={onChangeInputLabel}
+            onChangeValue={onChangeValue}
             labelMode={labelMode}
             setCanvasCursor={setCanvasCursor}
             setCanvasCursorAsDefault={setCanvasCursorAsDefault}

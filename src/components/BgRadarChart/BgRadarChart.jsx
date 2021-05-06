@@ -12,6 +12,7 @@ import MeshPolygon from "../MeshPolygon";
 import sty from "./BgRadarChart.module.scss";
 
 const BgRadarChart = ({
+  data,
   numAbility,
   numLayer = 3,
   color,
@@ -21,21 +22,21 @@ const BgRadarChart = ({
   textStrokeColor,
   outlineColor,
   centerOutLineColor,
-  labelList,
   offsetY,
   lengthRadius,
   labelMode,
   onChangeInputLabel,
+  onChangeValue,
   setCanvasCursor,
   setCanvasCursorAsDefault,
 }) => {
   return (
     <group>
       <MeshPolygon
+        data={data}
         numPolygonSide={numAbility}
         color={color}
         isCenterLineDisplay={true}
-        labelList={labelList}
         fontColor={fontColor}
         textHeight={textHeight}
         textStrokeWidth={textStrokeWidth}
@@ -46,6 +47,7 @@ const BgRadarChart = ({
         lengthRadius={lengthRadius}
         labelMode={labelMode}
         onChangeInputLabel={onChangeInputLabel}
+        onChangeValue={onChangeValue}
         setCanvasCursor={setCanvasCursor}
         setCanvasCursorAsDefault={setCanvasCursorAsDefault}
       />
@@ -62,7 +64,7 @@ const BgRadarChart = ({
             position={[
               0,
               0,
-              (offsetY / (numLayer - 1)) * (numLayer - index) * 1.1,
+              (offsetY / (numLayer - 1)) * (numLayer - index) * 1.6,
             ]}
             outlineColor={outlineColor}
             lengthRadius={lengthRadius}
@@ -73,8 +75,6 @@ const BgRadarChart = ({
   );
 };
 
-BgRadarChart.propTypes = {
-  labelList: PropTypes.array,
-};
+BgRadarChart.propTypes = {};
 
 export default BgRadarChart;

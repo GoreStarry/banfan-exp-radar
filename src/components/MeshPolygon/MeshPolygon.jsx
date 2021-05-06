@@ -19,6 +19,7 @@ import Labels from "./Labels";
 
 const MeshPolygon = React.memo(
   ({
+    data,
     centerPoint = [0, 0, 0],
     numPolygonSide,
     lengthRadius = 1,
@@ -32,13 +33,14 @@ const MeshPolygon = React.memo(
     outOutlineStrokeWidth = 1,
     isOutlineDashMode = false,
     isThinLineMode = true,
-    labelList,
+
     fontColor,
     textHeight,
     textStrokeWidth,
     textStrokeColor,
     labelMode,
     onChangeInputLabel,
+    onChangeValue,
     offsetY,
     setCanvasCursor,
     setCanvasCursorAsDefault,
@@ -130,6 +132,7 @@ const MeshPolygon = React.memo(
 
           {isCenterLineDisplay && (
             <Labels
+              data={data}
               points={points}
               color={fontColor}
               textHeight={textHeight}
@@ -137,9 +140,9 @@ const MeshPolygon = React.memo(
               strokeColor={textStrokeColor}
               textAlignList={textAlignList}
               verticalAlignList={verticalAlignList}
-              labelList={labelList}
               mode={labelMode}
               onChangeInputLabel={onChangeInputLabel}
+              onChangeValue={onChangeValue}
               setCanvasCursor={setCanvasCursor}
               setCanvasCursorAsDefault={setCanvasCursorAsDefault}
             />
@@ -151,6 +154,7 @@ const MeshPolygon = React.memo(
 );
 
 MeshPolygon.propTypes = {
+  data: PropTypes.array,
   centerPoint: PropTypes.array,
   isOutlineMode: PropTypes.bool,
   isCenterLineDisplay: PropTypes.bool,
@@ -158,7 +162,6 @@ MeshPolygon.propTypes = {
   isOutlineDashMode: PropTypes.bool,
   isThinLineMode: PropTypes.bool,
   lengthRadius: PropTypes.number,
-  labelList: PropTypes.array,
   renderExtendComponent: PropTypes.func,
 };
 

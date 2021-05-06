@@ -4,10 +4,10 @@ import Label from "../Label";
 
 const Labels = React.memo(
   ({
+    data,
     points,
     textAlignList,
     verticalAlignList,
-    labelList,
     // mode,
     // onChangeInputLabel,
     // labelMode,
@@ -17,16 +17,17 @@ const Labels = React.memo(
     ...restProps
   }) => {
     // console.log(points, labelList);
-    return labelList.map((labelText, index) => {
+    return data.map(({ name, value }, index) => {
       return (
         <Label
           key={index}
           index={index}
           position={[points[index].x, points[index].y, 0]}
-          text={labelText}
+          text={name}
+          value={value}
           textAlign={textAlignList[index]}
           verticalAlign={verticalAlignList[index]}
-          isLastLabel={labelList.length === index + 1}
+          isLastLabel={data.length === index + 1}
           {...restProps}
         />
       );

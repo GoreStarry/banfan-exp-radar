@@ -5,7 +5,7 @@ import React, {
   useCallback,
   useEffect,
 } from "react";
-import { useSpring } from "@react-spring/three";
+import { useSpring } from "react-spring/three";
 
 export default function useResetCamera({
   defaultPosition = [0, 1, 0],

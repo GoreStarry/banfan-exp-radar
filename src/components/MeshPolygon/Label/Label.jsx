@@ -6,19 +6,19 @@ import shallow from "zustand/shallow";
 
 import useStore from "../../../store/useStore.js";
 import SpriteText from "../../SpriteText";
+import SpringSlider from "../../SpringSlider";
 
-import {
-  handlePointerOverIn,
-  handlePointerOverOut,
-} from "../../../helpers/threePointerCursor.js";
 import sty from "./Label.module.scss";
+import { stubTrue } from "lodash-es";
 
 const Label = ({
   position,
   text,
+  value,
   textAlign,
   verticalAlign,
   onChangeInputLabel,
+  onChangeValue,
   labelMode,
   color,
   mode,
@@ -26,6 +26,8 @@ const Label = ({
   setCanvasCursor,
   setCanvasCursorAsDefault,
   isLastLabel,
+  distanceFactor = 10,
+
   ...restProps
 }) => {
   const [isEditMode, setIsEditMode] = useState(mode === "edit");
@@ -64,7 +66,7 @@ const Label = ({
       setTimeout(() => {
         // refInput.current.input.focus();
         refInput.current.focus();
-      }, 10);
+      }, 30);
       useStore.setState({
         focusPointIndex: index.toString(),
       });
@@ -102,17 +104,32 @@ const Label = ({
   }, [isEditMode]);
 
   return isEditMode ? (
-    <Html center distanceFactor={10} position={position}>
-      <AutosizeInput
-        ref={refInput}
-        className={sty.label}
-        defaultValue={text}
-        data-index={index}
-        onChange={onChangeInputLabel}
-        onBlur={handleCloseEdit}
-        onKeyDown={handleEnterKeyDown}
-        onClick={onClickAutosizeInput}
-      />
+    <Html
+      center
+      // distanceFactor={distanceFactor}
+      position={position}
+    >
+      <div className={sty.container__edit}>
+        <div className={sty.container_slider}>
+          <SpringSlider
+            value={value}
+            onChange={onChangeValue}
+            index={index}
+
+            // scaleContainer={distanceFactor}
+          />
+        </div>
+        <AutosizeInput
+          ref={refInput}
+          className={sty.AutosizeInput}
+          defaultValue={text}
+          data-index={index}
+          onChange={onChangeInputLabel}
+          // onBlur={handleCloseEdit}
+          onKeyDown={handleEnterKeyDown}
+          onClick={onClickAutosizeInput}
+        />
+      </div>
     </Html>
   ) : (
     <SpriteText
@@ -127,7 +144,7 @@ const Label = ({
       onPointerLeave={setCanvasCursorAsDefault}
       {...restProps}
     >
-      {text || "尚未輸入"}
+      {text || "？？？"}
     </SpriteText>
   );
 };

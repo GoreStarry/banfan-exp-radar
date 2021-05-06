@@ -12,7 +12,9 @@ const BgClickOut = React.memo(({}) => {
   }, []);
 
   return (
-    <group onClick={handleClickOut}>
+    <group
+      onPointerDown={handleClickOut} // prevent slider over drag
+    >
       <mesh position={[0, 0, -20]} rotation-y={Math.PI / 4}>
         <meshBasicMaterial
           color="white"

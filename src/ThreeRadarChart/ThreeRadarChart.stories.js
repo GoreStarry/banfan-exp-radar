@@ -32,22 +32,32 @@ const Template = ({ data: dataInit, ...args }) => {
   const [data, setData] = useState(dataInit);
   const [isTriggerSaveImage, setIsTriggerSaveImage] = useState(false);
 
-  const onChange = useCallback((e) => {
+  const onChangeInputLabel = useCallback((e) => {
     const {
       value,
       dataset: { index: indexString },
     } = e.target;
     setData((prevData) => {
       const index = parseInt(indexString);
-      // console.log(dataInit);
-      // console.log(prevData, index);
-      // console.log(index + 1);
-      // console.log(prevData.slice(0, index), prevData.slice(index + 1));
+
       return [
         ...prevData.slice(0, index),
         {
           name: value,
           value: prevData[index].value,
+        },
+        ...prevData.slice(index + 1),
+      ];
+    });
+  }, []);
+
+  const onChangeValue = useCallback((value, index) => {
+    setData((prevData) => {
+      return [
+        ...prevData.slice(0, index),
+        {
+          name: prevData[index].name,
+          value,
         },
         ...prevData.slice(index + 1),
       ];
@@ -70,7 +80,8 @@ const Template = ({ data: dataInit, ...args }) => {
       <ThreeRadarChart
         {...args}
         data={data}
-        onChangeInputLabel={onChange}
+        onChangeInputLabel={onChangeInputLabel}
+        onChangeValue={onChangeValue}
         isTriggerSaveImage={isTriggerSaveImage}
         onCompleteSaveImage={onCompleteSaveImage}
       />
