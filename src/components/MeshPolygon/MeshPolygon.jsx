@@ -44,6 +44,7 @@ const MeshPolygon = React.memo(
     offsetY,
     setCanvasCursor,
     setCanvasCursorAsDefault,
+    handleDeleteDataItem,
     ...restProps
   }) => {
     const twoPolygon = useMemo(() => {
@@ -145,6 +146,7 @@ const MeshPolygon = React.memo(
               onChangeValue={onChangeValue}
               setCanvasCursor={setCanvasCursor}
               setCanvasCursorAsDefault={setCanvasCursorAsDefault}
+              handleDeleteDataItem={handleDeleteDataItem}
             />
           )}
         </group>

@@ -53,6 +53,7 @@ const ThreeRadarChart = ({
   labelMode = "editable",
   onChangeInputLabel,
   onChangeValue,
+  handleDeleteDataItem,
 
   ...restProps
 }) => {
@@ -160,6 +161,7 @@ const ThreeRadarChart = ({
             labelMode={labelMode}
             setCanvasCursor={setCanvasCursor}
             setCanvasCursorAsDefault={setCanvasCursorAsDefault}
+            handleDeleteDataItem={handleDeleteDataItem}
           />
           <AbilityPlate
             data={data}

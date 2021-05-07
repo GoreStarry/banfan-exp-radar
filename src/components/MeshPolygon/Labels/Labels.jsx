@@ -8,14 +8,19 @@ const Labels = React.memo(
     points,
     textAlignList,
     verticalAlignList,
+    // handleDeleteDataItem
     // mode,
     // onChangeInputLabel,
     // labelMode,
     // color,
     // setCanvasCursor,
     // setCanvasCursorAsDefault,
+    handleDeleteDataItem,
     ...restProps
   }) => {
+    const handleDeleteData = useCallback((e) => {
+      handleDeleteDataItem(e.target.dataset.index);
+    }, []);
     // console.log(points, labelList);
     return data.map(({ name, value }, index) => {
       return (
@@ -28,6 +33,8 @@ const Labels = React.memo(
           textAlign={textAlignList[index]}
           verticalAlign={verticalAlignList[index]}
           isLastLabel={data.length === index + 1}
+          handleDeleteDataItem={handleDeleteData}
+          isDeleteAble={data.length > 3}
           {...restProps}
         />
       );

@@ -26,7 +26,8 @@ const Label = ({
   setCanvasCursorAsDefault,
   isLastLabel,
   distanceFactor = 10,
-
+  handleDeleteDataItem,
+  isDeleteAble,
   ...restProps
 }) => {
   const [isEditMode, setIsEditMode] = useState(mode === "edit");
@@ -111,6 +112,8 @@ const Label = ({
       handleEnterKeyDown={handleEnterKeyDown}
       textAlign={textAlign}
       verticalAlign={verticalAlign}
+      handleDeleteDataItem={handleDeleteDataItem}
+      isDeleteAble={isDeleteAble}
     />
   ) : (
     <SpriteText

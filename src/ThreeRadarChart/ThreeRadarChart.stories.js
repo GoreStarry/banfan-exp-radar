@@ -31,6 +31,7 @@ export default {
 const Template = ({ data: dataInit, ...args }) => {
   const [data, setData] = useState(dataInit);
   const [isTriggerSaveImage, setIsTriggerSaveImage] = useState(false);
+  const maxLengthData = 8;
 
   const onChangeInputLabel = useCallback((e) => {
     const {
@@ -64,6 +65,18 @@ const Template = ({ data: dataInit, ...args }) => {
     });
   }, []);
 
+  const deleteDataItem = useCallback((index) => {
+    setData((prevData) => {
+      return [...prevData.slice(0, index), ...prevData.slice(index + 1)];
+    });
+  }, []);
+
+  const addDataItem = useCallback(() => {
+    setData((prevData) => {
+      return [...prevData, { name: "", value: 0 }];
+    });
+  }, []);
+
   const saveImage = useCallback(() => {
     setIsTriggerSaveImage(true);
   }, []);
@@ -77,6 +90,11 @@ const Template = ({ data: dataInit, ...args }) => {
       <button className={sty.btn__save_img} onClick={saveImage}>
         圖片儲存
       </button>
+      {maxLengthData > data.length && (
+        <button className={sty.btn__add} onClick={addDataItem}>
+          ＋
+        </button>
+      )}
       <ThreeRadarChart
         {...args}
         data={data}
@@ -84,6 +102,7 @@ const Template = ({ data: dataInit, ...args }) => {
         onChangeValue={onChangeValue}
         isTriggerSaveImage={isTriggerSaveImage}
         onCompleteSaveImage={onCompleteSaveImage}
+        handleDeleteDataItem={deleteDataItem}
       />
     </>
   );
@@ -93,11 +112,8 @@ export const Primary = Template.bind({});
 Primary.args = {
   // primary: true,
   data: [
-    { name: "我齁", value: 5 },
     { name: "美術", value: 3 },
-    { name: "測試試", value: 0.5 },
     { name: "創意", value: 3 },
-    { name: "耐玩", value: 5 },
     { name: "策略", value: 1 },
   ],
 };

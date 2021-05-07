@@ -28,6 +28,8 @@ const EditLabel = ({
   handleEnterKeyDown,
   textAlign, // left, right, center
   verticalAlign, // top, bottom, center
+  handleDeleteDataItem,
+  isDeleteAble,
 }) => {
   const refIsMount = useRef(false);
   const { focusPointIndex } = useStore(
@@ -74,6 +76,12 @@ const EditLabel = ({
             // scaleContainer={distanceFactor}
           />
         </div>
+        {isDeleteAble && (
+          <button data-index={index} onClick={handleDeleteDataItem}>
+            {" "}
+            −{" "}
+          </button>
+        )}
         <AutosizeInput
           ref={refInput}
           className={sty.AutosizeInput}

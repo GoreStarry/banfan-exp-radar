@@ -29,6 +29,7 @@ const BgRadarChart = ({
   onChangeValue,
   setCanvasCursor,
   setCanvasCursorAsDefault,
+  handleDeleteDataItem,
 }) => {
   return (
     <group>
@@ -50,6 +51,7 @@ const BgRadarChart = ({
         onChangeValue={onChangeValue}
         setCanvasCursor={setCanvasCursor}
         setCanvasCursorAsDefault={setCanvasCursorAsDefault}
+        handleDeleteDataItem={handleDeleteDataItem}
       />
       {[...Array(numLayer)].map((nulll, index) => {
         const scaleSize = index / numLayer;
