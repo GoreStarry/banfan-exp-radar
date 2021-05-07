@@ -68,7 +68,12 @@ const ThreeRadarChart = ({
   }, []);
 
   const saveImage = useCallback(() => {
-    canvasToImage(refCanvas.current, nameSavedImage);
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    ctx.canvas.width = refCanvas.current.width;
+    ctx.canvas.height = refCanvas.current.height;
+    ctx.drawImage(refCanvas.current, 0, 0);
+    canvasToImage(canvas, nameSavedImage);
   }, []);
 
   // const autoDetectFocusPointIndex = useMemo(() => {
