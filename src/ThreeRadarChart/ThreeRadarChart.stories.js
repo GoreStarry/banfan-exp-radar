@@ -1,11 +1,13 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import cx from "classnames";
+import { getBggThing } from "bgg-xml-api-client";
 
 import ThreeRadarChart from "./ThreeRadarChart.jsx";
 
-import sty from "./ThreeRadarChart.module.scss";
+import sty from "./test.module.scss";
 import "css-reset-and-normalize/css/reset-and-normalize.min.css";
 import "css-reset-and-normalize/css/button-reset.min.css";
+import imgLogo from "./images/logo.png";
 
 export default {
   title: "Example/Radar Chart",
@@ -35,6 +37,19 @@ const Template = ({ data: dataInit, ...args }) => {
   const [data, setData] = useState(dataInit);
   const [isTriggerSaveImage, setIsTriggerSaveImage] = useState(false);
   const maxLengthData = 8;
+
+  const [bggGameCover, setBggGameCover] = useState();
+
+  useEffect(async () => {
+    try {
+      const { data } = await getBggThing({ id: "224517" });
+      setBggGameCover(data.item.image);
+    } catch (error) {
+      console.log(error);
+    }
+
+    return () => {};
+  }, []);
 
   const onChangeInputLabel = useCallback((value, index) => {
     setData((prevData) => {
@@ -82,18 +97,25 @@ const Template = ({ data: dataInit, ...args }) => {
     setIsTriggerSaveImage(false);
   }, []);
 
+  console.log(sty.img__cover);
+
   return (
-    <>
+    <div className={sty.container}>
+      {bggGameCover && (
+        <img className={sty.img__cover} src={bggGameCover} alt="" />
+      )}
       <button className={cx(sty.btn, sty.btn__save_img)} onClick={saveImage}>
         圖片儲存
       </button>
       {maxLengthData > data.length && (
         <button className={cx(sty.btn, sty.btn__add)} onClick={addDataItem}>
-          ＋
+          ＋1維度
         </button>
       )}
+      <img className={sty.img__logo} src={imgLogo} alt="" />
       <ThreeRadarChart
         {...args}
+        className={sty.ThreeRadarChart}
         data={data}
         onChangeInputLabel={onChangeInputLabel}
         onChangeValue={onChangeValue}
@@ -101,13 +123,14 @@ const Template = ({ data: dataInit, ...args }) => {
         onCompleteSaveImage={onCompleteSaveImage}
         handleDeleteDataItem={deleteDataItem}
       />
-    </>
+    </div>
   );
 };
 
 export const Primary = Template.bind({});
 Primary.args = {
   // primary: true,
+  // canvasBgColor: "transparent",
   data: [
     { name: "美術", value: 3 },
     { name: "創意", value: 3 },

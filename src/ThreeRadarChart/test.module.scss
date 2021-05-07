@@ -1,0 +1,66 @@
+body {
+  background-color: black;
+  padding: 0 !important;
+}
+
+:global(#root) {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  position: relative;
+  width: 100vmin;
+  height: 100vmin;
+}
+
+.ThreeRadarChart {
+  // background-image: url("./images/cover.png");
+  // background-size: cover;
+  border: 5vmin solid #aac3e0;
+}
+
+.btn {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  border-radius: calc(1.5rem / 2);
+  background-color: white;
+  cursor: pointer;
+  padding: 0.4em 0.6em 0.1em;
+  box-shadow: 0 3px 1px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(0, 0, 0, 0.02);
+  bottom: 2.5vmin;
+  z-index: 2;
+}
+
+.btn__save_img {
+  position: absolute;
+  right: 2.5vmin;
+}
+
+.btn__add {
+  position: absolute;
+  left: 2.5vmin;
+}
+
+.img__cover {
+  position: absolute;
+  left: 5vmin;
+  top: 5vmin;
+  width: 30vmin;
+  height: 30vmin;
+  object-fit: contain;
+  z-index: 4;
+}
+
+.img__logo {
+  position: absolute;
+  bottom: 0;
+  left: 50vmin;
+  transform: translateX(-50%);
+  width: 35vmin;
+  height: auto;
+  z-index: 4;
+}

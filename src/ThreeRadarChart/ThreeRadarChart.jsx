@@ -11,6 +11,7 @@ import { Canvas } from "@react-three/fiber";
 // import * as THREE from "three";
 import canvasToImage from "canvas-to-image";
 import _ from "lodash";
+import cx from "classnames";
 
 import useStore from "../store/useStore.js";
 
@@ -22,6 +23,7 @@ import Camera from "../components/Camera";
 import sty from "./ThreeRadarChart.module.scss";
 
 const ThreeRadarChart = ({
+  className,
   centerPoint = [0, 0, 0],
   lengthRadius = 1,
   maxValue = 5,
@@ -38,11 +40,12 @@ const ThreeRadarChart = ({
   onCompleteSaveImage,
   nameSavedImage,
   children,
-  canvasBgColor = "white",
-  fontColor = "#222222",
+  canvasBgColor = "#fffdfa",
+  fontColor = "black",
   textHeight = 0.3,
-  textStrokeWidth = 0.3,
-  textStrokeColor = "#fc5603",
+  textStrokeWidth = 1,
+  // textStrokeColor = "#fc5603",
+  textStrokeColor = "white",
   outlineColor = "#fc5603",
   centerOutLineColor,
   abilityPlateBgColor = "#aac3e0",
@@ -128,18 +131,24 @@ const ThreeRadarChart = ({
   // console.log(autoDetectFocusPointIndex);
   return (
     <div
-      className={sty.ThreeRadarChart}
+      className={cx(sty.ThreeRadarChart, className)}
 
       // onClick={saveImage}
     >
       <Canvas
         shadows
         key={canvasBgColor}
+        alpha
         gl={{ preserveDrawingBuffer: true }}
         onCreated={({ camera, gl, scene, viewport }) => {
           gl.setPixelRatio(window.devicePixelRatio || 2);
           refCanvas.current = gl.domElement;
-          scene.background = canvasBgColor && new THREE.Color(canvasBgColor);
+          if (canvasBgColor && canvasBgColor !== "transparent") {
+            scene.background = new THREE.Color(canvasBgColor);
+          } else {
+            scene.background = null;
+            gl.setClearColor(0x000000, 0);
+          }
         }}
         {...restProps}
       >

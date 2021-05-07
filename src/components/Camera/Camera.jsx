@@ -26,7 +26,8 @@ const Camera = React.memo(
     lengthRadius,
     centerPoint,
     startCameraPosition = [0, 0, 5],
-    defaultCameraPosition = [2.5, -2, 4],
+    // defaultCameraPosition = [2.5, -2, 4],
+    defaultCameraPosition = [0, 0, 5],
     defaultCameraLookAtPosition = [0, 0, 0],
   }) => {
     const refCamera = useRef(null);

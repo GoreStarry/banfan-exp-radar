@@ -27,7 +27,7 @@ const Labels = React.memo(
         <Label
           key={index}
           index={index}
-          position={[points[index].x, points[index].y, 0]}
+          position={[points[index].x, points[index].y, 0.1]}
           text={name}
           value={value}
           textAlign={textAlignList[index]}
