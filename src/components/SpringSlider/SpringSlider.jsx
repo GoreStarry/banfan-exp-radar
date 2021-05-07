@@ -71,6 +71,7 @@ const SpringSlider = ({
       } = state;
 
       event.preventDefault();
+      event.stopPropagation();
 
       const barWidth = refBar.current.offsetWidth;
 
