@@ -51,13 +51,12 @@ const ThreeRadarChart = ({
   // focusPointIndex = false,
   // isAutoDetectFocusPointIndex = true,
   labelMode = "editable",
-  onChangeInputLabel,
+  onChangeInputLabel: onChangeInputLabelOrigin,
   onChangeValue,
   handleDeleteDataItem,
 
   ...restProps
 }) => {
-  const labelList = useMemo(() => data.map(({ name }) => name), [data]);
   const refCanvas = useRef();
   const refCacheData = useRef();
 
@@ -116,6 +115,14 @@ const ThreeRadarChart = ({
     ],
     []
   );
+
+  const onChangeInputLabel = useCallback((e) => {
+    const {
+      value,
+      dataset: { index: indexString },
+    } = e.target;
+    onChangeInputLabelOrigin(value, parseInt(indexString));
+  }, []);
 
   const numAbility = data.length < 3 ? 3 : data.length;
   // console.log(autoDetectFocusPointIndex);

@@ -5619,6 +5619,11 @@ css-prefers-color-scheme@^3.1.1:
   dependencies:
     postcss "^7.0.5"
 
+css-reset-and-normalize@^2.3.5:
+  version "2.3.5"
+  resolved "https://registry.yarnpkg.com/css-reset-and-normalize/-/css-reset-and-normalize-2.3.5.tgz#e7ed1369e53eb9dbe22cae3e5ef4d88ce9cc8999"
+  integrity sha512-lvhftImDx84z0O1RltM3Th6yDJstBfHzCgVBLIDI5vn/BQpONp0D4lccj5tTHkIRSaFdBYOyKUsaB6WkL2zD1A==
+
 css-select-base-adapter@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/css-select-base-adapter/-/css-select-base-adapter-0.1.1.tgz#3b2ff4972cc362ab88561507a95408a1432135d7"

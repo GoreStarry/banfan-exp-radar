@@ -1,11 +1,16 @@
+.EditLabel {
+}
+
 .AutosizeInput {
   display: flex !important;
   flex-direction: row;
   justify-content: center;
   &,
   input {
-    min-width: 100px;
     font-size: 20px;
+    height: 30px;
+    min-width: 100px;
+    box-sizing: border-box !important;
   }
 }
 
@@ -14,11 +19,33 @@
   border-radius: 2.5px;
   margin-bottom: 1rem;
   color: #fc5603;
+  font-size: 20px;
+}
+
+.container__inputs {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
 }
 
 .container__edit {
+  position: relative;
   min-width: 100px;
 }
 
-.EditLabel {
+.btn__delete {
+  position: absolute;
+  text-align: center;
+  right: calc(100% + 8px);
+  font-size: 20px;
+  height: 100%;
+  line-height: 30px;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  background-color: white;
+  cursor: pointer;
+  box-shadow: 0 3px 1px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(0, 0, 0, 0.02);
+  color: black;
 }

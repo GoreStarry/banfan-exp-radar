@@ -76,11 +76,12 @@ const Label = ({
   const onClickLabel = useCallback((e) => {
     e.stopPropagation();
     if (mode === "editable") {
-      setIsEditModes(true);
       setTimeout(() => {
-        // refInput.current.input.focus();
-        refInput.current.focus();
+        setIsEditModes(true);
       }, 30);
+      setTimeout(() => {
+        refInput.current?.input?.focus();
+      }, 500);
       useStore.setState({
         focusPointIndex: index.toString(),
       });
@@ -101,7 +102,7 @@ const Label = ({
 
   return isEditMode ? (
     <EditLabel
-      refInput={refInput}
+      ref={refInput}
       position={position}
       value={value}
       onChangeValue={onChangeValue}

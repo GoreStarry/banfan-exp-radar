@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   background-color: black;
 }
@@ -16,12 +20,22 @@ body {
   // }
 }
 
+.btn {
+  font-size: 1.5rem;
+  line-height: 1.5rem;
+  border-radius: calc(1.5rem / 2);
+  background-color: white;
+  cursor: pointer;
+  padding: 4px 8px;
+  box-shadow: 0 3px 1px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(0, 0, 0, 0.02);
+}
+
 .btn__save_img {
   position: fixed;
   z-index: 2;
   bottom: 1rem;
   right: 1rem;
-  font-size: 1.5rem;
 }
 
 .btn__add {
@@ -29,5 +43,4 @@ body {
   z-index: 2;
   bottom: 1rem;
   left: 1rem;
-  font-size: 1.5rem;
 }

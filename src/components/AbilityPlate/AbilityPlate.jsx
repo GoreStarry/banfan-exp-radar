@@ -32,13 +32,12 @@ const AbilityPlate = React.memo(
       (index) => ({
         x: 0,
         y: 0,
-        onChange: () => {
-          const x = springsPosition[index].x.get();
-          const y = springsPosition[index].y.get();
-          refShapePoints.current[index].x = x;
-          refShapePoints.current[index].y = y;
+        onChange: ({ value: { x, y } }) => {
+          refShapePoints.current[index] = { x, y };
 
-          refShapePoints.current.forEach(({ x, y }, indexPoint) => {
+          data.forEach((nulll, indexPoint) => {
+            const { x = 0, y = 0 } = refShapePoints.current[indexPoint] || {};
+
             if (indexPoint === 0) {
               refShapeFactor.current = new THREE.Shape();
               refShapeFactor.current.autoClose = true;
@@ -52,45 +51,52 @@ const AbilityPlate = React.memo(
             }
           });
         },
-      })
+      }),
+      [data.length]
     );
 
-    const animateTransition = useCallback((data) => {
-      const numAbility = data.length;
-      const basicAngle = (Math.PI * 2) / numAbility;
-      setSpringsPosition((index) => {
-        const targetAngle = basicAngle * index;
-        const targetValue = data[index].value / maxValue;
+    const animateTransition = useCallback(
+      (data) => {
+        const numAbility = data.length;
+        const basicAngle = (Math.PI * 2) / numAbility;
+        setSpringsPosition((index) => {
+          const targetAngle = basicAngle * index;
+          const targetValue = data[index].value / maxValue;
 
-        return {
-          delay: index * 80,
-          x: lengthRadius * targetValue * Math.cos(targetAngle),
-          y: lengthRadius * targetValue * Math.sin(targetAngle),
-        };
-      });
-    }, []);
+          return {
+            delay: index * 80,
+            x: lengthRadius * targetValue * Math.cos(targetAngle),
+            y: lengthRadius * targetValue * Math.sin(targetAngle),
+          };
+        });
+      },
+      [setSpringsPosition]
+    );
 
     useEffect(() => {
       animateTransition(data);
       return () => {};
-    }, [data]);
+    }, [data, animateTransition]);
 
-    const handleClick = useCallback(() => {
-      setSpringsPosition(() => {
-        return {
-          x: 0,
-          y: 0,
-          onRest: () => {
-            setTimeout(() => {
-              animateTransition(data);
-            }, 300);
-          },
-        };
-      });
-    }, [data]);
+    // const handleClick = useCallback(() => {
+    //   setSpringsPosition(() => {
+    //     return {
+    //       x: 0,
+    //       y: 0,
+    //       onRest: () => {
+    //         setTimeout(() => {
+    //           animateTransition(data);
+    //         }, 300);
+    //       },
+    //     };
+    //   });
+    // }, [data]);
 
     return (
-      <group {...restProps} onClick={handleClick} onPointerDown={handleClick}>
+      <group
+        {...restProps}
+        // onClick={handleClick} onPointerDown={handleClick}
+      >
         <group rotation={[0, 0, Math.PI / 2]}>
           <mesh>
             {shape && <shapeBufferGeometry args={[shape]} />}

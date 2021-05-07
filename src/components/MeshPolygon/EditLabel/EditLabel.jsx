@@ -16,87 +16,96 @@ const translateMap = {
   right: "-50%",
 };
 
-const EditLabel = ({
-  refInput,
-  position,
-  value,
-  onChangeValue,
-  onChangeInputLabel,
-  index,
-  text,
-  handleCloseEdit,
-  handleEnterKeyDown,
-  textAlign, // left, right, center
-  verticalAlign, // top, bottom, center
-  handleDeleteDataItem,
-  isDeleteAble,
-}) => {
-  const refIsMount = useRef(false);
-  const { focusPointIndex } = useStore(
-    useCallback(
-      (state) => ({
-        focusPointIndex: state.focusPointIndex,
-      }),
-      []
-    ),
-    shallow
-  );
+const EditLabel = React.forwardRef(
+  (
+    {
+      position,
+      value,
+      onChangeValue,
+      onChangeInputLabel,
+      index,
+      text,
+      handleCloseEdit,
+      handleEnterKeyDown,
+      textAlign, // left, right, center
+      verticalAlign, // top, bottom, center
+      handleDeleteDataItem,
+      isDeleteAble,
+    },
+    ref
+  ) => {
+    const refIsMount = useRef(false);
+    const { focusPointIndex } = useStore(
+      useCallback(
+        (state) => ({
+          focusPointIndex: state.focusPointIndex,
+        }),
+        []
+      ),
+      shallow
+    );
 
-  useEffect(() => {
-    if (refIsMount.current && focusPointIndex !== index) {
-      handleCloseEdit();
-    } else {
-      refIsMount.current = true;
-    }
-    return () => {};
-  }, [focusPointIndex]);
+    useEffect(() => {
+      if (refIsMount.current && focusPointIndex !== index) {
+        handleCloseEdit();
+      } else {
+        refIsMount.current = true;
+      }
+      return () => {};
+    }, [focusPointIndex]);
 
-  const onClickAutosizeInput = useCallback((e) => {
-    e.stopPropagation();
-  }, []);
+    const onClickAutosizeInput = useCallback((e) => {
+      e.stopPropagation();
+    }, []);
 
-  return (
-    <Html
-      center
-      // distanceFactor={distanceFactor}
-      position={position}
-    >
-      <div
-        className={sty.container__edit}
-        style={{
-          transform: `translate(${translateMap[textAlign]},${translateMap[verticalAlign]})`,
-        }}
+    return (
+      <Html
+        center
+        // distanceFactor={distanceFactor}
+        position={position}
       >
-        <div className={sty.container_slider}>
-          <SpringSlider
-            value={value}
-            onChange={onChangeValue}
-            index={index}
+        <div
+          className={sty.container__edit}
+          style={{
+            transform: `translate(${translateMap[textAlign]},${translateMap[verticalAlign]})`,
+          }}
+        >
+          <div className={sty.container_slider}>
+            <SpringSlider
+              value={value}
+              onChange={onChangeValue}
+              index={index}
 
-            // scaleContainer={distanceFactor}
-          />
+              // scaleContainer={distanceFactor}
+            />
+          </div>
+          <div className={sty.container__inputs}>
+            {isDeleteAble && (
+              <button
+                className={sty.btn__delete}
+                data-index={index}
+                onClick={handleDeleteDataItem}
+              >
+                −
+              </button>
+            )}
+            <AutosizeInput
+              ref={ref}
+              className={sty.AutosizeInput}
+              defaultValue={text}
+              data-index={index}
+              onChange={onChangeInputLabel}
+              // onBlur={handleCloseEdit}
+              onKeyDown={handleEnterKeyDown}
+              onClick={onClickAutosizeInput}
+              onPointerDown={onClickAutosizeInput}
+            />
+          </div>
         </div>
-        {isDeleteAble && (
-          <button data-index={index} onClick={handleDeleteDataItem}>
-            {" "}
-            −{" "}
-          </button>
-        )}
-        <AutosizeInput
-          ref={refInput}
-          className={sty.AutosizeInput}
-          defaultValue={text}
-          data-index={index}
-          onChange={onChangeInputLabel}
-          // onBlur={handleCloseEdit}
-          onKeyDown={handleEnterKeyDown}
-          onClick={onClickAutosizeInput}
-          onPointerDown={onClickAutosizeInput}
-        />
-      </div>
-    </Html>
-  );
-};
+      </Html>
+    );
+  }
+);
 
 EditLabel.propTypes = {};
 

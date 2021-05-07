@@ -19,7 +19,7 @@ const Labels = React.memo(
     ...restProps
   }) => {
     const handleDeleteData = useCallback((e) => {
-      handleDeleteDataItem(e.target.dataset.index);
+      handleDeleteDataItem(parseInt(e.target.dataset.index));
     }, []);
     // console.log(points, labelList);
     return data.map(({ name, value }, index) => {

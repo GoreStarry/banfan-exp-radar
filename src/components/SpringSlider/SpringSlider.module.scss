@@ -21,6 +21,7 @@
   position: absolute;
   left: 0;
   top: 50%;
+  cursor: pointer;
 }
 
 .box__marker {
@@ -28,6 +29,7 @@
   left: 0;
   bottom: calc(var(--dot-size) * 1.6);
   transform-origin: center bottom;
+  user-select: none;
 }
 
 .marker {

@@ -1,8 +1,11 @@
 import React, { useState, useCallback } from "react";
+import cx from "classnames";
 
 import ThreeRadarChart from "./ThreeRadarChart.jsx";
 
 import sty from "./ThreeRadarChart.module.scss";
+import "css-reset-and-normalize/css/reset-and-normalize.min.css";
+import "css-reset-and-normalize/css/button-reset.min.css";
 
 export default {
   title: "Example/Radar Chart",
@@ -33,14 +36,8 @@ const Template = ({ data: dataInit, ...args }) => {
   const [isTriggerSaveImage, setIsTriggerSaveImage] = useState(false);
   const maxLengthData = 8;
 
-  const onChangeInputLabel = useCallback((e) => {
-    const {
-      value,
-      dataset: { index: indexString },
-    } = e.target;
+  const onChangeInputLabel = useCallback((value, index) => {
     setData((prevData) => {
-      const index = parseInt(indexString);
-
       return [
         ...prevData.slice(0, index),
         {
@@ -87,11 +84,11 @@ const Template = ({ data: dataInit, ...args }) => {
 
   return (
     <>
-      <button className={sty.btn__save_img} onClick={saveImage}>
+      <button className={cx(sty.btn, sty.btn__save_img)} onClick={saveImage}>
         圖片儲存
       </button>
       {maxLengthData > data.length && (
-        <button className={sty.btn__add} onClick={addDataItem}>
+        <button className={cx(sty.btn, sty.btn__add)} onClick={addDataItem}>
           ＋
         </button>
       )}
