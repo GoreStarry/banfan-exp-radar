@@ -64,17 +64,19 @@ const SpringSlider = ({
     (state) => {
       const {
         movement: [mx],
-        // event,
+        event,
         // down,
         // swipe, // [swipeX, swipeY] 0 if no swipe detected, -1 or 1 otherwise
         // tap, // is the drag assimilated to a tap
       } = state;
 
+      event.preventDefault();
+
       const barWidth = refBar.current.offsetWidth;
 
       const clampValue = clamp(0, barWidth, mx);
 
-      console.log(clampValue);
+      // console.log(clampValue);
 
       onChange(
         snapValue(mapRange(0, barWidth, minValue, maxValue, clampValue)),

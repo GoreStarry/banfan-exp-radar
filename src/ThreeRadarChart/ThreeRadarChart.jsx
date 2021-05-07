@@ -13,7 +13,6 @@ import canvasToImage from "canvas-to-image";
 import _ from "lodash";
 
 import useStore from "../store/useStore.js";
-import { Plane } from "@react-three/drei";
 
 import BgClickOut from "../components/BgClickOut";
 import AbilityPlate from "../components/AbilityPlate";
@@ -121,10 +120,8 @@ const ThreeRadarChart = ({
       // onClick={saveImage}
     >
       <Canvas
-        //  shadows
+        shadows
         key={canvasBgColor}
-        width="300px"
-        height="300px"
         gl={{ preserveDrawingBuffer: true }}
         onCreated={({ camera, gl, scene, viewport }) => {
           gl.setPixelRatio(window.devicePixelRatio || 2);
@@ -133,7 +130,10 @@ const ThreeRadarChart = ({
         }}
         {...restProps}
       >
-        <group rotation={[-Math.PI / 100, -Math.PI / 100, 0]}>
+        <group
+          scale={1.3}
+          // rotation={[-Math.PI / 100, -Math.PI / 100, 0]}
+        >
           <BgClickOut />
 
           <BgRadarChart

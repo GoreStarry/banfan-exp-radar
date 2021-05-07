@@ -6,15 +6,23 @@ import React, {
   useEffect,
 } from "react";
 import { useSpring } from "react-spring/three";
+import * as THREE from "three";
 
 export default function useResetCamera({
   defaultPosition = [0, 1, 0],
+  defaultCameraLookAtPosition,
   refControls,
   refCamera,
 }) {
-  const [, setSpringCam] = useSpring({ position: defaultPosition }, []);
+  const [, setSpringCam] = useSpring(
+    { position: defaultPosition, lookAtPosition: defaultCameraLookAtPosition },
+    []
+  );
 
-  const resetCamSpring = (resetPosition = defaultPosition) => {
+  const resetCamSpring = (
+    resetPosition = defaultPosition,
+    lookAtPosition = defaultCameraLookAtPosition
+  ) => {
     setSpringCam({
       from: {
         position: [
@@ -22,10 +30,12 @@ export default function useResetCamera({
           refCamera.current.position.y,
           refCamera.current.position.z,
         ],
+        // lookAtPosition: defaultCameraLookAtPosition,
       },
-      to: { position: resetPosition },
-      onChange: ({ value: { position } }) => {
+      to: { position: resetPosition, lookAtPosition },
+      onChange: ({ value: { position, lookAtPosition } }) => {
         refCamera.current.position.set(...position);
+        refControls.current.target = new THREE.Vector3(...lookAtPosition);
         refControls.current.update();
       },
       onStart: () => {

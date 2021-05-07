@@ -1,0 +1,24 @@
+.AutosizeInput {
+  display: flex !important;
+  flex-direction: row;
+  justify-content: center;
+  &,
+  input {
+    min-width: 100px;
+    font-size: 20px;
+  }
+}
+
+.container_slider {
+  height: 5px;
+  border-radius: 2.5px;
+  margin-bottom: 1rem;
+  color: #fc5603;
+}
+
+.container__edit {
+  min-width: 100px;
+}
+
+.EditLabel {
+}

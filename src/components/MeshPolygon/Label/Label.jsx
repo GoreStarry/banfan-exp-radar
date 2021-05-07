@@ -1,12 +1,11 @@
 import React, { useRef, useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Html } from "@react-three/drei";
-import AutosizeInput from "react-input-autosize";
 import shallow from "zustand/shallow";
 
 import useStore from "../../../store/useStore.js";
 import SpriteText from "../../SpriteText";
-import SpringSlider from "../../SpringSlider";
+
+import EditLabel from "../EditLabel";
 
 import sty from "./Label.module.scss";
 import { stubTrue } from "lodash-es";
@@ -49,6 +48,20 @@ const Label = ({
     useStore.setState({ isOnEditLabel: bool });
   }, []);
 
+  const handleCloseEdit = useCallback(() => {
+    if (mode === "editable") {
+      setIsEditModes(false);
+    }
+  }, []);
+
+  const handleEnterKeyDown = useCallback((e) => {
+    if (e.key === "Enter") {
+      handleCloseEdit();
+
+      useStore.setState({ isResetCamera: true });
+    }
+  }, []);
+
   useEffect(() => {
     // console.log(isEditMode, isClickOutLabel, isLastLabel);
     if (isEditMode && isClickOutLabel) {
@@ -73,24 +86,6 @@ const Label = ({
     }
   }, []);
 
-  const handleCloseEdit = useCallback(() => {
-    if (mode === "editable") {
-      setIsEditModes(false);
-    }
-  }, []);
-
-  const handleEnterKeyDown = useCallback((e) => {
-    if (e.key === "Enter") {
-      handleCloseEdit();
-
-      useStore.setState({ isResetCamera: true });
-    }
-  }, []);
-
-  const onClickAutosizeInput = useCallback((e) => {
-    e.stopPropagation();
-  }, []);
-
   useEffect(() => {
     if (isEditMode) {
       setCanvasCursorAsDefault();
@@ -104,37 +99,24 @@ const Label = ({
   }, [isEditMode]);
 
   return isEditMode ? (
-    <Html
-      center
-      // distanceFactor={distanceFactor}
+    <EditLabel
+      refInput={refInput}
       position={position}
-    >
-      <div className={sty.container__edit}>
-        <div className={sty.container_slider}>
-          <SpringSlider
-            value={value}
-            onChange={onChangeValue}
-            index={index}
-
-            // scaleContainer={distanceFactor}
-          />
-        </div>
-        <AutosizeInput
-          ref={refInput}
-          className={sty.AutosizeInput}
-          defaultValue={text}
-          data-index={index}
-          onChange={onChangeInputLabel}
-          // onBlur={handleCloseEdit}
-          onKeyDown={handleEnterKeyDown}
-          onClick={onClickAutosizeInput}
-        />
-      </div>
-    </Html>
+      value={value}
+      onChangeValue={onChangeValue}
+      onChangeInputLabel={onChangeInputLabel}
+      index={index}
+      text={text}
+      handleCloseEdit={handleCloseEdit}
+      handleEnterKeyDown={handleEnterKeyDown}
+      textAlign={textAlign}
+      verticalAlign={verticalAlign}
+    />
   ) : (
     <SpriteText
       className={sty.SpriteText}
       onClick={onClickLabel}
+      onPointerDown={onClickLabel}
       key={`sprite-${text}`}
       position={position}
       color={color}

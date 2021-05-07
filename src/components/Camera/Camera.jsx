@@ -25,13 +25,14 @@ const Camera = React.memo(
     numAbility,
     lengthRadius,
     centerPoint,
+    startCameraPosition = [0, 0, 5],
+    defaultCameraPosition = [2.5, -2, 4],
+    defaultCameraLookAtPosition = [0, 0, 0],
   }) => {
     const refCamera = useRef(null);
     const didMount = useRef(false);
     const refOrbitControls = useRef(null);
     // const defaultCameraPosition = [-8, 8, 6]
-    const startCameraPosition = [0, 0, 5];
-    const defaultCameraPosition = [2.5, -2, 4];
 
     const { isClickOutLabel, isResetCamera, focusPointIndex } = useStore(
       useCallback(
@@ -48,6 +49,7 @@ const Camera = React.memo(
     const resetCamera = useResetCamera({
       defaultPosition: defaultCameraPosition,
       refControls: refOrbitControls,
+      defaultCameraLookAtPosition,
       refCamera,
     });
 
@@ -92,7 +94,7 @@ const Camera = React.memo(
             y,
             180 / numAbility
           ),
-          lengthRadius * 3,
+          lengthRadius * 2,
         ];
       });
     }, [numAbility, lengthRadius]);
@@ -101,8 +103,11 @@ const Camera = React.memo(
       if (!didMount.current) {
         didMount.current = true;
       } else if (focusPointIndex !== false && listFocusPointPositionList) {
-        // console.log(focusPointIndex);
-        resetCamera(listFocusPointPositionList[focusPointIndex]);
+        console.log(focusPointIndex);
+        resetCamera(
+          listFocusPointPositionList[focusPointIndex],
+          focusPointIndex === "0" ? [0, 1, -1] : [0, 0, -1]
+        );
       }
       return () => {};
     }, [focusPointIndex, listFocusPointPositionList]);

@@ -90,7 +90,7 @@ const AbilityPlate = React.memo(
     }, [data]);
 
     return (
-      <group {...restProps} onClick={handleClick}>
+      <group {...restProps} onClick={handleClick} onPointerDown={handleClick}>
         <group rotation={[0, 0, Math.PI / 2]}>
           <mesh>
             {shape && <shapeBufferGeometry args={[shape]} />}
