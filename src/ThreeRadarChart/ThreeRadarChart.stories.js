@@ -39,11 +39,21 @@ const Template = ({ data: dataInit, ...args }) => {
   const maxLengthData = 8;
 
   const [bggGameCover, setBggGameCover] = useState();
+  const [drawImageList, setDrawImageList] = useState([]);
 
   useEffect(async () => {
     try {
       const { data } = await getBggThing({ id: "224517" });
       setBggGameCover(data.item.image);
+      setDrawImageList([
+        {
+          src: data.item.image,
+          x: 0,
+          y: 0,
+          width: 100,
+          height: 100,
+        },
+      ]);
     } catch (error) {
       console.log(error);
     }
@@ -97,8 +107,6 @@ const Template = ({ data: dataInit, ...args }) => {
     setIsTriggerSaveImage(false);
   }, []);
 
-  console.log(sty.img__cover);
-
   return (
     <div className={sty.container}>
       {bggGameCover && (
@@ -122,6 +130,7 @@ const Template = ({ data: dataInit, ...args }) => {
         isTriggerSaveImage={isTriggerSaveImage}
         onCompleteSaveImage={onCompleteSaveImage}
         handleDeleteDataItem={deleteDataItem}
+        drawImageList={drawImageList}
       />
     </div>
   );

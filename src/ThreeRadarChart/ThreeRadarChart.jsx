@@ -57,6 +57,7 @@ const ThreeRadarChart = ({
   onChangeInputLabel: onChangeInputLabelOrigin,
   onChangeValue,
   handleDeleteDataItem,
+  drawImageList = [],
 
   ...restProps
 }) => {
@@ -70,14 +71,33 @@ const ThreeRadarChart = ({
     refCanvas.current.style.cursor = "default";
   }, []);
 
-  const saveImage = useCallback(() => {
+  const saveImage = useCallback(async () => {
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
     ctx.canvas.width = refCanvas.current.width;
     ctx.canvas.height = refCanvas.current.height;
+
     ctx.drawImage(refCanvas.current, 0, 0);
+
+    await Promise.all(
+      drawImageList.map(({ src, x, y, width, height }) => {
+        return new Promise((resolve, reject) => {
+          let img = new Image();
+          img.crossOrigin = "anonymous";
+
+          img.onload = () => {
+            console.log(img);
+            ctx.drawImage(img, x, y, width, height);
+            resolve();
+          };
+          img.onerror = reject;
+          img.src = src;
+        });
+      })
+    );
+
     canvasToImage(canvas, nameSavedImage);
-  }, []);
+  }, [drawImageList]);
 
   // const autoDetectFocusPointIndex = useMemo(() => {
   //   if (!refCacheData.current) {
@@ -219,6 +239,15 @@ ThreeRadarChart.propTypes = {
     PropTypes.shape({
       name: PropTypes.string,
       value: PropTypes.number,
+    })
+  ),
+  drawImageList: PropTypes.arrayOf(
+    PropTypes.shape({
+      src: PropTypes.string,
+      x: PropTypes.number,
+      y: PropTypes.number,
+      width: PropTypes.number,
+      height: PropTypes.number,
     })
   ),
   onChangeInputLabel: PropTypes.func,
