@@ -1,6 +1,7 @@
 import React, { useRef, useState, useCallback, useEffect } from "react";
 import cx from "classnames";
 import { getBggThing } from "bgg-xml-api-client";
+import { useWindowSize } from "react-use";
 
 import ThreeRadarChart from "./ThreeRadarChart.jsx";
 
@@ -38,39 +39,61 @@ const Template = ({ data: dataInit, ...args }) => {
   const refContainer = useRef();
   const [data, setData] = useState(dataInit);
   const [isTriggerSaveImage, setIsTriggerSaveImage] = useState(false);
+  const { width: winWidth, height: winHeight } = useWindowSize();
   const maxLengthData = 8;
 
   const [bggGameCover, setBggGameCover] = useState();
   const [drawImageList, setDrawImageList] = useState([]);
 
-  useEffect(async () => {
-    try {
-      const { data } = await getBggThing({ id: "224517" });
-      setBggGameCover(data.item.image);
-
-      const { offsetWidth: width, offsetHeight: height } = refContainer.current;
-      setDrawImageList([
-        {
-          src: imgBrass,
-          x: width * 0.05,
-          y: height * 0.05,
-          width: width * 0.3,
-          height: height * 0.3,
-        },
-        {
-          src: imgLogo,
-          x: width * 0.325,
-          y: height * 0.9,
-          width: width * 0.35,
-          height: height * 0.1,
-        },
-      ]);
-    } catch (error) {
-      console.log(error);
-    }
-
+  useEffect(() => {
+    const { offsetWidth: width, offsetHeight: height } = refContainer.current;
+    setDrawImageList([
+      {
+        src: imgBrass,
+        x: width * 0.05,
+        y: height * 0.05,
+        width: width * 0.3,
+        height: height * 0.3,
+      },
+      {
+        src: imgLogo,
+        x: width * 0.325,
+        y: height * 0.9,
+        width: width * 0.35,
+        height: height * 0.1,
+      },
+    ]);
     return () => {};
-  }, []);
+  }, [winWidth, winHeight]);
+
+  // useEffect(async () => {
+  //   try {
+  //     const { data } = await getBggThing({ id: "224517" });
+  //     setBggGameCover(data.item.image);
+
+  //     const { offsetWidth: width, offsetHeight: height } = refContainer.current;
+  //     setDrawImageList([
+  //       {
+  //         src: imgBrass,
+  //         x: width * 0.05,
+  //         y: height * 0.05,
+  //         width: width * 0.3,
+  //         height: height * 0.3,
+  //       },
+  //       {
+  //         src: imgLogo,
+  //         x: width * 0.325,
+  //         y: height * 0.9,
+  //         width: width * 0.35,
+  //         height: height * 0.1,
+  //       },
+  //     ]);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+
+  //   return () => {};
+  // }, []);
 
   const onChangeInputLabel = useCallback((value, index) => {
     setData((prevData) => {
@@ -120,9 +143,7 @@ const Template = ({ data: dataInit, ...args }) => {
 
   return (
     <div ref={refContainer} className={sty.container}>
-      {bggGameCover && (
-        <img className={sty.img__cover} src={bggGameCover} alt="" />
-      )}
+      {imgBrass && <img className={sty.img__cover} src={imgBrass} alt="" />}
       <button className={cx(sty.btn, sty.btn__save_img)} onClick={saveImage}>
         圖片儲存
       </button>

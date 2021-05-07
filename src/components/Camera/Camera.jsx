@@ -95,7 +95,7 @@ const Camera = React.memo(
             y,
             180 / numAbility
           ),
-          lengthRadius * 2,
+          lengthRadius * 2.5,
         ];
       });
     }, [numAbility, lengthRadius]);
@@ -106,7 +106,8 @@ const Camera = React.memo(
       } else if (focusPointIndex !== false && listFocusPointPositionList) {
         resetCamera(
           listFocusPointPositionList[focusPointIndex],
-          focusPointIndex === "0" ? [0, 1, -1] : [0, 0, -1]
+          [0, 0, -1]
+          // focusPointIndex === "0" ? [0, 0, -1] : [0, 0, -1]
         );
       }
       return () => {};
