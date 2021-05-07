@@ -128,7 +128,9 @@ const ThreeRadarChart = ({
   }, []);
 
   const numAbility = data.length < 3 ? 3 : data.length;
-  // console.log(autoDetectFocusPointIndex);
+
+  const defaultGroupPosition = useMemo(() => [0, -0.5, 0], []);
+
   return (
     <div
       className={cx(sty.ThreeRadarChart, className)}
@@ -154,6 +156,7 @@ const ThreeRadarChart = ({
       >
         <group
           scale={1.3}
+          position={defaultGroupPosition}
           // rotation={[-Math.PI / 100, -Math.PI / 100, 0]}
         >
           <BgClickOut />
