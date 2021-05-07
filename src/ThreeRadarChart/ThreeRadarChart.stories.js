@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useRef, useState, useCallback, useEffect } from "react";
 import cx from "classnames";
 import { getBggThing } from "bgg-xml-api-client";
 
@@ -8,6 +8,7 @@ import sty from "./test.module.scss";
 import "css-reset-and-normalize/css/reset-and-normalize.min.css";
 import "css-reset-and-normalize/css/button-reset.min.css";
 import imgLogo from "./images/logo.png";
+import imgBrass from "./images/game/brass.jpg";
 
 export default {
   title: "Example/Radar Chart",
@@ -34,6 +35,7 @@ export default {
 };
 
 const Template = ({ data: dataInit, ...args }) => {
+  const refContainer = useRef();
   const [data, setData] = useState(dataInit);
   const [isTriggerSaveImage, setIsTriggerSaveImage] = useState(false);
   const maxLengthData = 8;
@@ -45,13 +47,22 @@ const Template = ({ data: dataInit, ...args }) => {
     try {
       const { data } = await getBggThing({ id: "224517" });
       setBggGameCover(data.item.image);
+
+      const { offsetWidth: width, offsetHeight: height } = refContainer.current;
       setDrawImageList([
         {
-          src: data.item.image,
-          x: 0,
-          y: 0,
-          width: 100,
-          height: 100,
+          src: imgBrass,
+          x: width * 0.05,
+          y: height * 0.05,
+          width: width * 0.3,
+          height: height * 0.3,
+        },
+        {
+          src: imgLogo,
+          x: width * 0.325,
+          y: height * 0.9,
+          width: width * 0.35,
+          height: height * 0.1,
         },
       ]);
     } catch (error) {
@@ -95,7 +106,7 @@ const Template = ({ data: dataInit, ...args }) => {
 
   const addDataItem = useCallback(() => {
     setData((prevData) => {
-      return [...prevData, { name: "", value: 0 }];
+      return [...prevData, { name: "", value: 0.5 }];
     });
   }, []);
 
@@ -108,7 +119,7 @@ const Template = ({ data: dataInit, ...args }) => {
   }, []);
 
   return (
-    <div className={sty.container}>
+    <div ref={refContainer} className={sty.container}>
       {bggGameCover && (
         <img className={sty.img__cover} src={bggGameCover} alt="" />
       )}
@@ -131,6 +142,8 @@ const Template = ({ data: dataInit, ...args }) => {
         onCompleteSaveImage={onCompleteSaveImage}
         handleDeleteDataItem={deleteDataItem}
         drawImageList={drawImageList}
+        drawBorderLineColor="#aac3e0"
+        drawBorderLineWidthPercent={0.05}
       />
     </div>
   );
@@ -140,6 +153,7 @@ export const Primary = Template.bind({});
 Primary.args = {
   // primary: true,
   // canvasBgColor: "transparent",
+
   data: [
     { name: "美術", value: 3 },
     { name: "創意", value: 3 },

@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/board-game-ban-fan/GoreStarry-board-game-ban-fan-bgbf-react-three-radar-chart/static/css/main.572710e5.chunk.css",
-    "main.js": "/board-game-ban-fan/GoreStarry-board-game-ban-fan-bgbf-react-three-radar-chart/static/js/main.869f234c.chunk.js",
-    "main.js.map": "/board-game-ban-fan/GoreStarry-board-game-ban-fan-bgbf-react-three-radar-chart/static/js/main.869f234c.chunk.js.map",
+    "main.js": "/board-game-ban-fan/GoreStarry-board-game-ban-fan-bgbf-react-three-radar-chart/static/js/main.599e60b1.chunk.js",
+    "main.js.map": "/board-game-ban-fan/GoreStarry-board-game-ban-fan-bgbf-react-three-radar-chart/static/js/main.599e60b1.chunk.js.map",
     "runtime-main.js": "/board-game-ban-fan/GoreStarry-board-game-ban-fan-bgbf-react-three-radar-chart/static/js/runtime-main.fc63db75.js",
     "runtime-main.js.map": "/board-game-ban-fan/GoreStarry-board-game-ban-fan-bgbf-react-three-radar-chart/static/js/runtime-main.fc63db75.js.map",
     "static/js/2.34d8eb6f.chunk.js": "/board-game-ban-fan/GoreStarry-board-game-ban-fan-bgbf-react-three-radar-chart/static/js/2.34d8eb6f.chunk.js",
@@ -15,6 +15,6 @@
     "static/js/runtime-main.fc63db75.js",
     "static/js/2.34d8eb6f.chunk.js",
     "static/css/main.572710e5.chunk.css",
-    "static/js/main.869f234c.chunk.js"
+    "static/js/main.599e60b1.chunk.js"
   ]
 }

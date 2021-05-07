@@ -9,8 +9,8 @@ import * as THREE from "three";
 import PropTypes from "prop-types";
 
 const positionYTranslateMap = {
-  top: -1,
-  bottom: 1,
+  top: -0.5,
+  bottom: 0.5,
   center: 0,
 };
 

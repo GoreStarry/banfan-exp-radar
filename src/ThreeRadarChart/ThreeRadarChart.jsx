@@ -58,6 +58,8 @@ const ThreeRadarChart = ({
   onChangeValue,
   handleDeleteDataItem,
   drawImageList = [],
+  drawBorderLineWidthPercent,
+  drawBorderLineColor,
 
   ...restProps
 }) => {
@@ -74,10 +76,17 @@ const ThreeRadarChart = ({
   const saveImage = useCallback(async () => {
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
-    ctx.canvas.width = refCanvas.current.width;
-    ctx.canvas.height = refCanvas.current.height;
+    const { width, height } = refCanvas.current;
+    ctx.canvas.width = width;
+    ctx.canvas.height = height;
 
     ctx.drawImage(refCanvas.current, 0, 0);
+
+    if (drawBorderLineColor && drawBorderLineWidthPercent) {
+      ctx.lineWidth = width * drawBorderLineWidthPercent * 2;
+      ctx.strokeStyle = drawBorderLineColor;
+      ctx.strokeRect(0, 0, width, height);
+    }
 
     await Promise.all(
       drawImageList.map(({ src, x, y, width, height }) => {
@@ -86,12 +95,11 @@ const ThreeRadarChart = ({
           img.crossOrigin = "anonymous";
 
           img.onload = () => {
-            console.log(img);
             ctx.drawImage(img, x, y, width, height);
             resolve();
           };
           img.onerror = reject;
-          img.src = src;
+          img.src = src + "?time=" + new Date().valueOf();
         });
       })
     );
