@@ -10270,6 +10270,11 @@ methods@~1.1.2:
   resolved "https://registry.yarnpkg.com/methods/-/methods-1.1.2.tgz#5529a4d67654134edcc5266656835b0f851afcee"
   integrity sha1-VSmk1nZUE07cxSZmVoNbD4Ua/O4=
 
+mezr@^0.6.2:
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/mezr/-/mezr-0.6.2.tgz#924b1345086f151e27c48355b9632853b6a0e495"
+  integrity sha1-kksTRQhvFR4nxINVuWMoU7ag5JU=
+
 microevent.ts@~0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/microevent.ts/-/microevent.ts-0.1.1.tgz#70b09b83f43df5172d0205a63025bce0f7357fa0"

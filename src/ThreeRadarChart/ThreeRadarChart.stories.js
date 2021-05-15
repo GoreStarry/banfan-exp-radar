@@ -4,6 +4,7 @@ import { getBggThing } from "bgg-xml-api-client";
 import { useWindowSize } from "react-use";
 
 import ThreeRadarChart from "./ThreeRadarChart.jsx";
+import FanSlider from "../components/FanSlider";
 
 import sty from "./test.module.scss";
 import "css-reset-and-normalize/css/reset-and-normalize.min.css";
@@ -166,6 +167,7 @@ const Template = ({ data: dataInit, ...args }) => {
         drawBorderLineColor="#aac3e0"
         drawBorderLineWidthPercent={0.05}
       />
+      <FanSlider name="工業革命：伯明翰" />
     </div>
   );
 };

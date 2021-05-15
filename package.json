@@ -1,6 +1,6 @@
 {
   "name": "BGBF-react-three-radar-chart",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "homepage": "https://github.com/board-game-ban-fan/GoreStarry-board-game-ban-fan-bgbf-react-three-radar-chart",
   "author": {
     "name": "Gore Wang",
@@ -34,6 +34,7 @@
     "css-reset-and-normalize": "^2.3.5",
     "gsap": "^3.6.1",
     "lodash": "^4.17.21",
+    "mezr": "^0.6.2",
     "react-input-autosize": "theruther4d/react-input-autosize#fix-thrashing-on-mount-with-raf",
     "react-spring": "^9.1.2",
     "react-three-gui": "0.4.2",

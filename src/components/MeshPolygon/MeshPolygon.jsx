@@ -24,6 +24,7 @@ const MeshPolygon = React.memo(
     numPolygonSide,
     lengthRadius = 1,
     color,
+    blending,
 
     isCenterLineDisplay = false,
 
@@ -110,7 +111,7 @@ const MeshPolygon = React.memo(
                 color={color}
                 side={THREE.DoubleSide}
                 transparent={true}
-                blending={THREE.MultiplyBlending}
+                blending={blending}
               />
             </mesh>
           )}
@@ -125,6 +126,7 @@ const MeshPolygon = React.memo(
           {isCenterLineDisplay && (
             <CenterLines
               points={points}
+              lineWidth={outOutlineStrokeWidth}
               centerPoint={centerPoint}
               offsetY={offsetY}
               color={centerOutLineColor || outlineColor}

@@ -10,6 +10,9 @@ import * as THREE from "three";
 import { useSprings } from "react-spring/three";
 
 import sty from "./AbilityPlate.module.scss";
+import { useSetState } from "react-use";
+
+import CusLine from "../CusLine";
 
 const AbilityPlate = React.memo(
   ({
@@ -22,10 +25,11 @@ const AbilityPlate = React.memo(
   }) => {
     const refShapeFactor = useRef();
     const refShapePoints = useRef(
-      [...Array(data.length)].map(() => ({ x: 0, y: 0 }))
+      [...Array(data.length)].map(() => ({ x: 0, y: 0, z: 0 }))
     );
 
     const [shape, setShape] = useState(null);
+    const [outlinePoints, setOutlinePoints] = useState();
 
     const [springsPosition, setSpringsPosition] = useSprings(
       data.length,
@@ -48,6 +52,11 @@ const AbilityPlate = React.memo(
 
             if (indexPoint + 1 === data.length) {
               setShape(refShapeFactor.current);
+
+              setOutlinePoints([
+                ...refShapePoints.current,
+                refShapePoints.current[0],
+              ]);
             }
           });
         },
@@ -65,8 +74,8 @@ const AbilityPlate = React.memo(
 
           return {
             delay: index * 80,
-            x: lengthRadius * targetValue * Math.cos(targetAngle),
-            y: lengthRadius * targetValue * Math.sin(targetAngle),
+            x: lengthRadius * 0.93 * targetValue * Math.cos(targetAngle),
+            y: lengthRadius * 0.93 * targetValue * Math.sin(targetAngle),
           };
         });
       },
@@ -105,6 +114,23 @@ const AbilityPlate = React.memo(
               color={color}
               transparent={true}
               blending={THREE.MultiplyBlending}
+            />
+          </mesh>
+          <mesh>
+            {shape && <shapeBufferGeometry args={[shape]} />}
+            <meshBasicMaterial
+              side={THREE.DoubleSide}
+              color={color}
+              transparent={true}
+              blending={THREE.AdditiveBlending}
+              // wireframe
+            />
+            <CusLine
+              points={outlinePoints}
+              color="rgba(0, 168, 255, 0.5)"
+              lineWidth={3}
+              transparent={true}
+              blending={THREE.AdditiveBlending}
             />
           </mesh>
         </group>

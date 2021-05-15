@@ -6,6 +6,7 @@ import React, {
   useEffect,
 } from "react";
 import PropTypes from "prop-types";
+import * as THREE from "three";
 
 import MeshPolygon from "../MeshPolygon";
 
@@ -21,6 +22,7 @@ const BgRadarChart = ({
   textStrokeWidth,
   textStrokeColor,
   outlineColor,
+  outOutlineStrokeWidth,
   centerOutLineColor,
   offsetY,
   lengthRadius,
@@ -30,6 +32,7 @@ const BgRadarChart = ({
   setCanvasCursor,
   setCanvasCursorAsDefault,
   handleDeleteDataItem,
+  children,
 }) => {
   return (
     <group>
@@ -52,27 +55,32 @@ const BgRadarChart = ({
         setCanvasCursor={setCanvasCursor}
         setCanvasCursorAsDefault={setCanvasCursorAsDefault}
         handleDeleteDataItem={handleDeleteDataItem}
+        blending={THREE.AdditiveBlending}
+        isThinLineMode={false}
+        outOutlineStrokeWidth={outOutlineStrokeWidth}
       />
-      {[...Array(numLayer)].map((nulll, index) => {
-        const scaleSize = index / numLayer;
+      <group>
+        {[...Array(numLayer)].map((nulll, index) => {
+          const scaleSize = index / numLayer;
 
-        return (
-          <MeshPolygon
-            key={"layer" + index}
-            isOutlineMode={true}
-            isThinLineMode={true}
-            numPolygonSide={numAbility}
-            scale={[scaleSize, scaleSize, 1]}
-            position={[
-              0,
-              0,
-              (offsetY / (numLayer - 1)) * (numLayer - index) * 1.6,
-            ]}
-            outlineColor={outlineColor}
-            lengthRadius={lengthRadius}
-          />
-        );
-      })}
+          return (
+            <MeshPolygon
+              key={"layer" + index}
+              color={index % 2 ? "#4c5c70" : "#37414e"}
+              blending={
+                index % 2 ? THREE.MultiplyBlending : THREE.AdditiveBlending
+              }
+              isThinLineMode={false}
+              outOutlineStrokeWidth={outOutlineStrokeWidth}
+              numPolygonSide={numAbility}
+              scale={[scaleSize, scaleSize, 1]}
+              position={[0, 0, (offsetY / (numLayer - 1)) * (numLayer - index)]}
+              outlineColor={outlineColor}
+              lengthRadius={lengthRadius}
+            />
+          );
+        })}
+      </group>
     </group>
   );
 };

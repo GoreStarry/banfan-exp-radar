@@ -8,6 +8,7 @@ const CusLine = ({
   points = [{ x: 1, y: 1, z: 1 }],
   isOutlineDashMode,
   lineWidth = 1,
+  ...restProps
 }) => {
   const onUpdate = useCallback(
     (self) =>
@@ -25,10 +26,11 @@ const CusLine = ({
     </line>
   ) : (
     <Line
-      points={points.map(({ x, y }) => [x, y, 0])} // Array of points
+      points={points.map(({ x, y, z = 0 }) => [x, y, z])} // Array of points
       color={color} // Default
       lineWidth={lineWidth} // In pixels (default)
       dashed={isOutlineDashMode} // Default
+      {...restProps}
     />
   );
 };

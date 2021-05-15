@@ -7,11 +7,14 @@ import React, {
 } from "react";
 import * as THREE from "three";
 import PropTypes from "prop-types";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useThree, extend } from "@react-three/fiber";
 // import * as THREE from "three";
 import canvasToImage from "canvas-to-image";
 import _ from "lodash";
 import cx from "classnames";
+import { Effects } from "@react-three/drei";
+import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
+import { FXAAShader } from "three/examples/jsm/shaders/FXAAShader";
 
 import useStore from "../store/useStore.js";
 
@@ -21,6 +24,8 @@ import BgRadarChart from "../components/BgRadarChart";
 import Camera from "../components/Camera";
 
 import sty from "./ThreeRadarChart.module.scss";
+
+extend({ ShaderPass });
 
 const ThreeRadarChart = ({
   className,
@@ -40,17 +45,17 @@ const ThreeRadarChart = ({
   onCompleteSaveImage,
   nameSavedImage,
   children,
-  canvasBgColor = "#fffdfa",
-  fontColor = "black",
-  textHeight = 0.3,
-  textStrokeWidth = 1,
-  // textStrokeColor = "#fc5603",
+  canvasBgColor = "transparent",
+  fontColor = "white",
+  textHeight = 0.22,
+  textStrokeWidth = 0,
   textStrokeColor = "white",
-  outlineColor = "#fc5603",
+  outlineColor = "#aac3e0",
+  outOutlineStrokeWidth = 1.2,
   centerOutLineColor,
-  abilityPlateBgColor = "#aac3e0",
-  abilityPlateColor = "red",
-  offsetY = 0.2,
+  abilityPlateBgColor = "#313b47",
+  abilityPlateColor = "#2E5E79",
+  offsetY = 0.15,
   // focusPointIndex = false,
   // isAutoDetectFocusPointIndex = true,
   labelMode = "editable",
@@ -141,7 +146,7 @@ const ThreeRadarChart = ({
     () => [
       0,
       0,
-      0 + offsetY,
+      0 + offsetY * 1.3 + 0.001,
       // 0.15
     ],
     []
@@ -162,7 +167,6 @@ const ThreeRadarChart = ({
   return (
     <div
       className={cx(sty.ThreeRadarChart, className)}
-
       // onClick={saveImage}
     >
       <Canvas
@@ -196,6 +200,7 @@ const ThreeRadarChart = ({
             color={abilityPlateBgColor}
             outlineColor={outlineColor}
             centerOutLineColor={centerOutLineColor}
+            outOutlineStrokeWidth={outOutlineStrokeWidth}
             fontColor={fontColor}
             textHeight={textHeight}
             textStrokeWidth={textStrokeWidth}
@@ -227,6 +232,19 @@ const ThreeRadarChart = ({
           lengthRadius={lengthRadius}
           centerPoint={centerPoint}
         />
+        {/* {refCanvas.current && (
+          <Effects>
+            <shaderPass
+              attachArray="passes"
+              args={[FXAAShader]}
+              material-uniforms-resolution-value={[
+                1 / refCanvas.current.width,
+                1 / refCanvas.current.height,
+              ]}
+              renderToScreen
+            />
+          </Effects>
+        )} */}
         {/* {control && <OrbitControls />} */}
       </Canvas>
     </div>
@@ -262,6 +280,7 @@ ThreeRadarChart.propTypes = {
   canvasBgColor: PropTypes.string,
   fontColor: PropTypes.string,
   outlineColor: PropTypes.string,
+  outOutlineStrokeWidth: PropTypes.number,
   abilityPlateBgColor: PropTypes.string,
   abilityPlateColor: PropTypes.string,
   focusPointIndex: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
