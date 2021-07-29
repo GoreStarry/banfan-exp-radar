@@ -125,6 +125,7 @@ const Camera = React.memo(
           ref={refOrbitControls}
           enableRotate={control}
           enablePan={control}
+          enableZoom={false}
           // because use perspectiveCamera so use maxDistance instead of maxZoom
           // maxDistance={isLockMaxDistance ? maxDistance : undefined}
           // minDistance={minDistance}

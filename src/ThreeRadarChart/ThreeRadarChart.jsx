@@ -12,9 +12,10 @@ import { Canvas, useThree, extend } from "@react-three/fiber";
 import canvasToImage from "canvas-to-image";
 import _ from "lodash";
 import cx from "classnames";
-import { Effects } from "@react-three/drei";
-import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
-import { FXAAShader } from "three/examples/jsm/shaders/FXAAShader";
+import { a, useSpring } from "react-spring/three";
+// import { Effects } from "@react-three/drei";
+// import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
+// import { FXAAShader } from "three/examples/jsm/shaders/FXAAShader";
 
 import useStore from "../store/useStore.js";
 
@@ -25,7 +26,7 @@ import Camera from "../components/Camera";
 
 import sty from "./ThreeRadarChart.module.scss";
 
-extend({ ShaderPass });
+// extend({ ShaderPass });
 
 const ThreeRadarChart = ({
   className,
@@ -63,8 +64,11 @@ const ThreeRadarChart = ({
   onChangeValue,
   handleDeleteDataItem,
   drawImageList = [],
+  refAdditionalDrawCanvas,
   drawBorderLineWidthPercent,
   drawBorderLineColor,
+  scale = 1.3,
+  position = [0, -0.5, 0],
 
   ...restProps
 }) => {
@@ -78,14 +82,34 @@ const ThreeRadarChart = ({
     refCanvas.current.style.cursor = "default";
   }, []);
 
+  const [springStyleRadarGroup, setRadarGroupSpring] = useSpring(
+    () => ({
+      scale,
+      position,
+    }),
+    [scale, position]
+  );
+
   const saveImage = useCallback(async () => {
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
     const { width, height } = refCanvas.current;
     ctx.canvas.width = width;
     ctx.canvas.height = height;
+    console.log(width, height);
 
+    // console.log(refCanvas.current);
     ctx.drawImage(refCanvas.current, 0, 0);
+
+    // refAdditionalDrawCanvas.current.app.render();
+    refAdditionalDrawCanvas.current &&
+      ctx.drawImage(
+        refAdditionalDrawCanvas.current.app.view,
+        0,
+        0,
+        width,
+        height
+      );
 
     if (drawBorderLineColor && drawBorderLineWidthPercent) {
       ctx.lineWidth = width * drawBorderLineWidthPercent * 2;
@@ -133,6 +157,8 @@ const ThreeRadarChart = ({
   //     return false;
   //   }
   // }, [data]);
+
+  const prepareToSaveImage = useCallback(() => {}, []);
 
   useEffect(() => {
     if (isTriggerSaveImage) {
@@ -186,13 +212,8 @@ const ThreeRadarChart = ({
         }}
         {...restProps}
       >
-        <group
-          scale={1.3}
-          position={defaultGroupPosition}
-          // rotation={[-Math.PI / 100, -Math.PI / 100, 0]}
-        >
+        <a.group {...springStyleRadarGroup}>
           <BgClickOut />
-
           <BgRadarChart
             data={data}
             numAbility={numAbility}
@@ -223,7 +244,7 @@ const ThreeRadarChart = ({
             position={positionAbilityPlate}
             lengthRadius={lengthRadius}
           />
-        </group>
+        </a.group>
         {children}
         <Camera
           // focusPointIndex={autoDetectFocusPointIndex || focusPointIndex}
@@ -276,6 +297,7 @@ ThreeRadarChart.propTypes = {
       height: PropTypes.number,
     })
   ),
+  refAdditionalDrawCanvas: PropTypes.object,
   onChangeInputLabel: PropTypes.func,
   canvasBgColor: PropTypes.string,
   fontColor: PropTypes.string,
@@ -288,13 +310,13 @@ ThreeRadarChart.propTypes = {
 
 export default ThreeRadarChart;
 
-function difference(object, base) {
-  return _.transform(object, (result, value, key) => {
-    if (!_.isEqual(value, base[key])) {
-      result[key] =
-        _.isObject(value) && _.isObject(base[key])
-          ? difference(value, base[key])
-          : value;
-    }
-  });
-}
+// function difference(object, base) {
+//   return _.transform(object, (result, value, key) => {
+//     if (!_.isEqual(value, base[key])) {
+//       result[key] =
+//         _.isObject(value) && _.isObject(base[key])
+//           ? difference(value, base[key])
+//           : value;
+//     }
+//   });
+// }

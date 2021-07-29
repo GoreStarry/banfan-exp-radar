@@ -2,6 +2,8 @@ import React, { useRef, useState, useCallback, useEffect } from "react";
 import cx from "classnames";
 import { getBggThing } from "bgg-xml-api-client";
 import { useWindowSize } from "react-use";
+import useStore from "../store/useStore";
+import BanfanPixiUI from "../components/BanfanPixiUI";
 
 import ThreeRadarChart from "./ThreeRadarChart.jsx";
 import FanSlider from "../components/FanSlider";
@@ -40,6 +42,26 @@ const Template = ({ data: dataInit, ...args }) => {
   const refContainer = useRef();
   const [data, setData] = useState(dataInit);
   const [isTriggerSaveImage, setIsTriggerSaveImage] = useState(false);
+  const [isFinalScoreMode, setIsFinalScoreMode] = useState(true);
+  const [radarStyles, setRadarStyles] = useState({
+    scale: 1.25,
+    position: [0.95, 0.8, 0],
+  });
+  const refPixiCanvas = useRef();
+
+  useEffect(() => {
+    if (isFinalScoreMode) {
+      useStore.setState({
+        isClickOutLabel: true,
+        isResetCamera: true,
+      });
+      setRadarStyles({ scale: 1.25, position: [0.95, 0.8, 0] });
+    } else {
+      setRadarStyles({ scale: 1.3, position: [0, -0.5, 0] });
+    }
+    return () => {};
+  }, [isFinalScoreMode]);
+
   const { width: winWidth, height: winHeight } = useWindowSize();
   const maxLengthData = 8;
 
@@ -135,6 +157,11 @@ const Template = ({ data: dataInit, ...args }) => {
   }, []);
 
   const saveImage = useCallback(() => {
+    // setRadarStyles({
+    //   scale: 1.3,
+    //   position: [0, -0.5, 0],
+    // });
+
     setIsTriggerSaveImage(true);
   }, []);
 
@@ -145,18 +172,12 @@ const Template = ({ data: dataInit, ...args }) => {
   return (
     <div ref={refContainer} className={sty.container}>
       {imgBrass && <img className={sty.img__cover} src={imgBrass} alt="" />}
-      <button className={cx(sty.btn, sty.btn__save_img)} onClick={saveImage}>
-        圖片儲存
-      </button>
-      {maxLengthData > data.length && (
-        <button className={cx(sty.btn, sty.btn__add)} onClick={addDataItem}>
-          ＋1維度
-        </button>
-      )}
       <img className={sty.img__logo} src={imgLogo} alt="" />
       <ThreeRadarChart
         {...args}
-        className={sty.ThreeRadarChart}
+        className={cx(sty.ThreeRadarChart, {
+          [sty.ThreeRadarChart__disable]: isFinalScoreMode,
+        })}
         data={data}
         onChangeInputLabel={onChangeInputLabel}
         onChangeValue={onChangeValue}
@@ -164,10 +185,43 @@ const Template = ({ data: dataInit, ...args }) => {
         onCompleteSaveImage={onCompleteSaveImage}
         handleDeleteDataItem={deleteDataItem}
         drawImageList={drawImageList}
+        refAdditionalDrawCanvas={refPixiCanvas}
         drawBorderLineColor="#aac3e0"
         drawBorderLineWidthPercent={0.05}
+        {...radarStyles}
       />
-      <FanSlider name="工業革命：伯明翰" />
+      {isFinalScoreMode ? (
+        <>
+          <button
+            className={cx(sty.btn, sty.btn__save_img)}
+            onClick={saveImage}
+          >
+            圖片儲存
+          </button>
+          <button
+            className={cx(sty.btn, sty.btn__confirm_radar)}
+            onClick={() => setIsFinalScoreMode(false)}
+          >
+            返回
+          </button>
+          <FanSlider name="工業革命：伯明翰" />
+          <BanfanPixiUI refCanvas={refPixiCanvas} />
+        </>
+      ) : (
+        <>
+          {maxLengthData > data.length && (
+            <button className={cx(sty.btn, sty.btn__add)} onClick={addDataItem}>
+              ＋1維度
+            </button>
+          )}
+          <button
+            className={cx(sty.btn, sty.btn__confirm_radar)}
+            onClick={() => setIsFinalScoreMode(true)}
+          >
+            確認體驗
+          </button>
+        </>
+      )}
     </div>
   );
 };
