@@ -1,12 +1,17 @@
 import React, { useRef, useState, useCallback, useEffect } from "react";
 import cx from "classnames";
 import { getBggThing } from "bgg-xml-api-client";
-import { useWindowSize } from "react-use";
+import { useStateValidator, useWindowSize } from "react-use";
 import useStore from "../store/useStore";
-import BanfanPixiUI from "../components/BanfanPixiUI";
+// import BanfanPixiUI from "../components/BanfanPixiUI";
+import html2canvas from "html2canvas";
+import useResizeContainerSize from "../hooks/useResizeContainerSize";
+
+// import html2pdf from "html2pdf.js";
 
 import ThreeRadarChart from "./ThreeRadarChart.jsx";
 import FanSlider from "../components/FanSlider";
+import BgBlurCanvas from "../components/BgBlurCanvas";
 
 import sty from "./test.module.scss";
 import "css-reset-and-normalize/css/reset-and-normalize.min.css";
@@ -14,6 +19,7 @@ import "css-reset-and-normalize/css/button-reset.min.css";
 import imgLogo from "./images/logo.png";
 import imgBrass from "./images/game/brass.jpg";
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default {
   title: "Example/Radar Chart",
   component: ThreeRadarChart,
@@ -47,7 +53,17 @@ const Template = ({ data: dataInit, ...args }) => {
     scale: 1.25,
     position: [0.95, 0.8, 0],
   });
+  const {
+    width: containerWidth,
+    height: containerHeight,
+  } = useResizeContainerSize(refContainer);
   const refPixiCanvas = useRef();
+  // const [isMount, setIsMount] = useState(false);
+
+  // useEffect(() => {
+  //   setIsMount(true);
+  //   return () => {};
+  // }, []);
 
   useEffect(() => {
     if (isFinalScoreMode) {
@@ -62,32 +78,32 @@ const Template = ({ data: dataInit, ...args }) => {
     return () => {};
   }, [isFinalScoreMode]);
 
-  const { width: winWidth, height: winHeight } = useWindowSize();
+  // const { width: winWidth, height: winHeight } = useWindowSize();
   const maxLengthData = 8;
 
-  const [bggGameCover, setBggGameCover] = useState();
-  const [drawImageList, setDrawImageList] = useState([]);
+  // const [bggGameCover, setBggGameCover] = useState();
+  // const [drawImageList, setDrawImageList] = useState([]);
 
-  useEffect(() => {
-    const { offsetWidth: width, offsetHeight: height } = refContainer.current;
-    setDrawImageList([
-      {
-        src: imgBrass,
-        x: width * 0.05,
-        y: height * 0.05,
-        width: width * 0.3,
-        height: height * 0.3,
-      },
-      {
-        src: imgLogo,
-        x: width * 0.325,
-        y: height * 0.9,
-        width: width * 0.35,
-        height: height * 0.1,
-      },
-    ]);
-    return () => {};
-  }, [winWidth, winHeight]);
+  // useEffect(() => {
+  //   const { offsetWidth: width, offsetHeight: height } = refContainer.current;
+  //   setDrawImageList([
+  //     {
+  //       src: imgBrass,
+  //       x: width * 0.05,
+  //       y: height * 0.05,
+  //       width: width * 0.3,
+  //       height: height * 0.3,
+  //     },
+  //     {
+  //       src: imgLogo,
+  //       x: width * 0.325,
+  //       y: height * 0.9,
+  //       width: width * 0.35,
+  //       height: height * 0.1,
+  //     },
+  //   ]);
+  //   return () => {};
+  // }, [winWidth, winHeight]);
 
   // useEffect(async () => {
   //   try {
@@ -157,12 +173,13 @@ const Template = ({ data: dataInit, ...args }) => {
   }, []);
 
   const saveImage = useCallback(() => {
-    // setRadarStyles({
-    //   scale: 1.3,
-    //   position: [0, -0.5, 0],
-    // });
+    console.log(refContainer.current);
+    html2canvas(refContainer.current, { scale: 2 }).then(function (canvas) {
+      document.body.appendChild(canvas);
+    });
+    // html2pdf(refContainer.current);
 
-    setIsTriggerSaveImage(true);
+    // setIsTriggerSaveImage(true);
   }, []);
 
   const onCompleteSaveImage = useCallback(() => {
@@ -171,6 +188,11 @@ const Template = ({ data: dataInit, ...args }) => {
 
   return (
     <div ref={refContainer} className={sty.container}>
+      <BgBlurCanvas
+        width={containerWidth}
+        height={containerHeight}
+        imageUrl={imgBrass}
+      />
       {imgBrass && <img className={sty.img__cover} src={imgBrass} alt="" />}
       <img className={sty.img__logo} src={imgLogo} alt="" />
       <ThreeRadarChart
@@ -184,7 +206,7 @@ const Template = ({ data: dataInit, ...args }) => {
         isTriggerSaveImage={isTriggerSaveImage}
         onCompleteSaveImage={onCompleteSaveImage}
         handleDeleteDataItem={deleteDataItem}
-        drawImageList={drawImageList}
+        // drawImageList={drawImageList}
         refAdditionalDrawCanvas={refPixiCanvas}
         drawBorderLineColor="#aac3e0"
         drawBorderLineWidthPercent={0.05}
@@ -200,12 +222,13 @@ const Template = ({ data: dataInit, ...args }) => {
           </button>
           <button
             className={cx(sty.btn, sty.btn__confirm_radar)}
+            // onClick={() => setIsFinalScoreMode(false)}
             onClick={() => setIsFinalScoreMode(false)}
           >
             返回
           </button>
           <FanSlider name="工業革命：伯明翰" />
-          <BanfanPixiUI refCanvas={refPixiCanvas} />
+          {/* <BanfanPixiUI refCanvas={refPixiCanvas} /> */}
         </>
       ) : (
         <>

@@ -111,11 +111,11 @@ const ThreeRadarChart = ({
         height
       );
 
-    if (drawBorderLineColor && drawBorderLineWidthPercent) {
-      ctx.lineWidth = width * drawBorderLineWidthPercent * 2;
-      ctx.strokeStyle = drawBorderLineColor;
-      ctx.strokeRect(0, 0, width, height);
-    }
+    // if (drawBorderLineColor && drawBorderLineWidthPercent) {
+    //   ctx.lineWidth = width * drawBorderLineWidthPercent * 2;
+    //   ctx.strokeStyle = drawBorderLineColor;
+    //   ctx.strokeRect(0, 0, width, height);
+    // }
 
     await Promise.all(
       drawImageList.map(({ src, x, y, width, height }) => {

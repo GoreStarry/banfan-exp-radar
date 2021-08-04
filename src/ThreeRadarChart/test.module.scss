@@ -36,9 +36,9 @@ body {
   }
 
   &::before {
-    background-image: url("./images/game/brass.jpg");
-    filter: blur(get-vw(19px));
-    background-size: cover;
+    // background-image: url("./images/game/brass.jpg");
+    // filter: blur(c(19px));
+    // background-size: cover;
   }
   &::after {
     opacity: 0.5;
@@ -99,6 +99,8 @@ body {
   z-index: 4;
   box-shadow: 0 get-vw(2px) get-vw(26px) 0 rgba(0, 0, 0, 0.5);
   border: solid get-vw(3px) #ffffff;
+  opacity: 1;
+  // opacity: 0.5;
 }
 
 .img__logo {
