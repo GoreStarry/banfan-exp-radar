@@ -36,6 +36,7 @@ const MeshPolygon = React.memo(
     isThinLineMode = true,
 
     fontColor,
+    spriteMaterialColor,
     textHeight,
     textStrokeWidth,
     textStrokeColor,
@@ -138,6 +139,7 @@ const MeshPolygon = React.memo(
               data={data}
               points={points}
               color={fontColor}
+              spriteMaterialColor={spriteMaterialColor}
               textHeight={textHeight}
               strokeWidth={textStrokeWidth}
               strokeColor={textStrokeColor}

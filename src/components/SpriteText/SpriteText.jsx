@@ -9,8 +9,8 @@ import * as THREE from "three";
 import PropTypes from "prop-types";
 
 const positionYTranslateMap = {
-  top: -0.5,
-  bottom: 0.5,
+  top: -0.7,
+  bottom: 0.7,
   center: 0,
 };
 
@@ -20,6 +20,7 @@ const SpriteText = React.memo(
     position,
     textHeight = 0.3,
     color = "rgba(255, 255, 255, 1)",
+    spriteMaterialColor, // new THREE.Color( 2, 2, 2 ); https://stackoverflow.com/questions/38517862/white-sprite-material
     backgroundColor,
     padding = 0,
     borderWidth = 0,
@@ -230,12 +231,12 @@ const SpriteText = React.memo(
         position[2],
       ],
       left: [
-        position[0] + scale[0] / 3 + scale[1] / 3,
+        position[0] + scale[0] / 3 + scale[1] / 3 + 0.04,
         position[1],
         position[2],
       ],
       right: [
-        position[0] - scale[0] / 3 - scale[1] / 3,
+        position[0] - scale[0] / 3 - scale[1] / 3 - 0.04,
         position[1],
         position[2],
       ],
@@ -243,7 +244,7 @@ const SpriteText = React.memo(
 
     return (
       <sprite scale={scale} position={positionMap[textAlign]} {...restProps}>
-        <spriteMaterial attach="material" transparent alphaTest={0.5}>
+        <spriteMaterial attach="material" color={spriteMaterialColor}>
           <canvasTexture
             key={children + color + textHeight + strokeWidth + strokeColor}
             attach="map"

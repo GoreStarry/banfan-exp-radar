@@ -130,7 +130,7 @@ const Label = ({
       onPointerLeave={setCanvasCursorAsDefault}
       {...restProps}
     >
-      {text || "？？？"}
+      {text || "？？"}
     </SpriteText>
   );
 };

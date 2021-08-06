@@ -1,10 +1,19 @@
-import React, { useRef, useState, useCallback, useEffect } from "react";
+import React, {
+  useRef,
+  useState,
+  useMemo,
+  useCallback,
+  useEffect,
+} from "react";
 import cx from "classnames";
 import { getBggThing } from "bgg-xml-api-client";
 import { useStateValidator, useWindowSize } from "react-use";
 import useStore from "../store/useStore";
-// import BanfanPixiUI from "../components/BanfanPixiUI";
 import html2canvas from "html2canvas";
+import canvasToImage from "canvas-to-image";
+import { isIOS } from "react-device-detect";
+import * as THREE from "three";
+
 import useResizeContainerSize from "../hooks/useResizeContainerSize";
 
 // import html2pdf from "html2pdf.js";
@@ -57,13 +66,25 @@ const Template = ({ data: dataInit, ...args }) => {
     width: containerWidth,
     height: containerHeight,
   } = useResizeContainerSize(refContainer);
-  const refPixiCanvas = useRef();
+  const spriteMaterialColor = useMemo(() => new THREE.Color(10, 10, 10), []);
+
   // const [isMount, setIsMount] = useState(false);
 
   // useEffect(() => {
   //   setIsMount(true);
   //   return () => {};
   // }, []);
+  const radarPositionMap = useMemo(
+    () => ({
+      3: { scale: 1.4, position: [0.65, 0.65, 0] },
+      4: { scale: 1.35, position: [0.65, 0.6, 0] },
+      5: { scale: 1.15, position: [0.95, 0.85, 0] },
+      6: { scale: 1.22, position: [0.95, 1, 0] },
+      7: { scale: 1.1, position: [0.95, 0.9, 0] },
+      8: { scale: 1.1, position: [0.98, 1, 0] },
+    }),
+    []
+  );
 
   useEffect(() => {
     if (isFinalScoreMode) {
@@ -71,7 +92,12 @@ const Template = ({ data: dataInit, ...args }) => {
         isClickOutLabel: true,
         isResetCamera: true,
       });
-      setRadarStyles({ scale: 1.25, position: [0.95, 0.8, 0] });
+      const { position, scale } = radarPositionMap[data.length];
+      setRadarStyles({
+        scale,
+        position,
+        rotation: [0.1, 2 * Math.PI - 0.1, 0.01],
+      });
     } else {
       setRadarStyles({ scale: 1.3, position: [0, -0.5, 0] });
     }
@@ -175,7 +201,16 @@ const Template = ({ data: dataInit, ...args }) => {
   const saveImage = useCallback(() => {
     console.log(refContainer.current);
     html2canvas(refContainer.current, { scale: 2 }).then(function (canvas) {
-      document.body.appendChild(canvas);
+      // document.body.appendChild(canvas);
+      if (isIOS) {
+        window.location.href = canvas.toDataURL("image/jpeg", 1.0);
+      } else {
+        canvasToImage(canvas, {
+          name: "myImage",
+          type: "jpg",
+          quality: 1,
+        });
+      }
     });
     // html2pdf(refContainer.current);
 
@@ -206,12 +241,13 @@ const Template = ({ data: dataInit, ...args }) => {
         isTriggerSaveImage={isTriggerSaveImage}
         onCompleteSaveImage={onCompleteSaveImage}
         handleDeleteDataItem={deleteDataItem}
-        // drawImageList={drawImageList}
-        refAdditionalDrawCanvas={refPixiCanvas}
+        fontColor="white"
+        spriteMaterialColor={spriteMaterialColor}
         drawBorderLineColor="#aac3e0"
         drawBorderLineWidthPercent={0.05}
         {...radarStyles}
       />
+      <FanSlider name="工業革命：伯明翰" isOpen={isFinalScoreMode} />
       {isFinalScoreMode ? (
         <>
           <button
@@ -227,8 +263,6 @@ const Template = ({ data: dataInit, ...args }) => {
           >
             返回
           </button>
-          <FanSlider name="工業革命：伯明翰" />
-          {/* <BanfanPixiUI refCanvas={refPixiCanvas} /> */}
         </>
       ) : (
         <>
@@ -258,5 +292,10 @@ Primary.args = {
     { name: "美術", value: 3 },
     { name: "創意", value: 3 },
     { name: "策略", value: 1 },
+    // { name: "策略", value: 1 },
+    // { name: "策略", value: 1 },
+    // { name: "策略", value: 1 },
+    // { name: "策略", value: 1 },
+    // { name: "策略", value: 1 },
   ],
 };

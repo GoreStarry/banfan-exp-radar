@@ -9,7 +9,6 @@ import * as THREE from "three";
 import PropTypes from "prop-types";
 import { Canvas, useThree, extend } from "@react-three/fiber";
 // import * as THREE from "three";
-import canvasToImage from "canvas-to-image";
 import _ from "lodash";
 import cx from "classnames";
 import { a, useSpring } from "react-spring/three";
@@ -42,12 +41,11 @@ const ThreeRadarChart = ({
     { name: "策略", value: 1 },
   ],
   control = true,
-  isTriggerSaveImage,
-  onCompleteSaveImage,
   nameSavedImage,
   children,
   canvasBgColor = "transparent",
   fontColor = "white",
+  spriteMaterialColor, // new THREE.Color( 2, 2, 2 ); https://stackoverflow.com/questions/38517862/white-sprite-material
   textHeight = 0.22,
   textStrokeWidth = 0,
   textStrokeColor = "white",
@@ -63,12 +61,9 @@ const ThreeRadarChart = ({
   onChangeInputLabel: onChangeInputLabelOrigin,
   onChangeValue,
   handleDeleteDataItem,
-  drawImageList = [],
-  refAdditionalDrawCanvas,
-  drawBorderLineWidthPercent,
-  drawBorderLineColor,
   scale = 1.3,
   position = [0, -0.5, 0],
+  rotation = [0, 0, 0],
 
   ...restProps
 }) => {
@@ -86,87 +81,11 @@ const ThreeRadarChart = ({
     () => ({
       scale,
       position,
+      rotation,
+      config: { mass: 2, tension: 150 },
     }),
-    [scale, position]
+    [scale, position, rotation]
   );
-
-  const saveImage = useCallback(async () => {
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-    const { width, height } = refCanvas.current;
-    ctx.canvas.width = width;
-    ctx.canvas.height = height;
-    console.log(width, height);
-
-    // console.log(refCanvas.current);
-    ctx.drawImage(refCanvas.current, 0, 0);
-
-    // refAdditionalDrawCanvas.current.app.render();
-    refAdditionalDrawCanvas.current &&
-      ctx.drawImage(
-        refAdditionalDrawCanvas.current.app.view,
-        0,
-        0,
-        width,
-        height
-      );
-
-    // if (drawBorderLineColor && drawBorderLineWidthPercent) {
-    //   ctx.lineWidth = width * drawBorderLineWidthPercent * 2;
-    //   ctx.strokeStyle = drawBorderLineColor;
-    //   ctx.strokeRect(0, 0, width, height);
-    // }
-
-    await Promise.all(
-      drawImageList.map(({ src, x, y, width, height }) => {
-        return new Promise((resolve, reject) => {
-          let img = new Image();
-          img.crossOrigin = "anonymous";
-
-          img.onload = () => {
-            ctx.drawImage(img, x, y, width, height);
-            resolve();
-          };
-          img.onerror = reject;
-          img.src = src + "?time=" + new Date().valueOf();
-        });
-      })
-    );
-
-    canvasToImage(canvas, nameSavedImage);
-  }, [drawImageList]);
-
-  // const autoDetectFocusPointIndex = useMemo(() => {
-  //   if (!refCacheData.current) {
-  //     refCacheData.current = data;
-  //     return false;
-  //   }
-
-  //   if (isAutoDetectFocusPointIndex) {
-  //     const diffIndex = data.findIndex((item, index) => {
-  //       // console.log(Object.keys(difference(item, refCacheData.current[index])));
-  //       return (
-  //         Object.keys(difference(item, refCacheData.current[index])).length !==
-  //         0
-  //       );
-  //     });
-  //     refCacheData.current = data;
-
-  //     return diffIndex === -1 ? false : diffIndex.toString();
-  //   } else {
-  //     return false;
-  //   }
-  // }, [data]);
-
-  const prepareToSaveImage = useCallback(() => {}, []);
-
-  useEffect(() => {
-    if (isTriggerSaveImage) {
-      saveImage();
-      onCompleteSaveImage();
-    }
-    return () => {};
-  }, [isTriggerSaveImage]);
 
   const positionAbilityPlate = useMemo(
     () => [
@@ -213,6 +132,13 @@ const ThreeRadarChart = ({
         {...restProps}
       >
         <a.group {...springStyleRadarGroup}>
+          {/* <lightProbe intensity={1} /> */}
+          <spotLight
+            color={0xffffff}
+            intensity={1}
+            position={[0, 20, -80]}
+            angle={Math.PI / 1.2}
+          />
           <BgClickOut />
           <BgRadarChart
             data={data}
@@ -223,6 +149,7 @@ const ThreeRadarChart = ({
             centerOutLineColor={centerOutLineColor}
             outOutlineStrokeWidth={outOutlineStrokeWidth}
             fontColor={fontColor}
+            spriteMaterialColor={spriteMaterialColor}
             textHeight={textHeight}
             textStrokeWidth={textStrokeWidth}
             textStrokeColor={textStrokeColor}
@@ -288,19 +215,11 @@ ThreeRadarChart.propTypes = {
       value: PropTypes.number,
     })
   ),
-  drawImageList: PropTypes.arrayOf(
-    PropTypes.shape({
-      src: PropTypes.string,
-      x: PropTypes.number,
-      y: PropTypes.number,
-      width: PropTypes.number,
-      height: PropTypes.number,
-    })
-  ),
   refAdditionalDrawCanvas: PropTypes.object,
   onChangeInputLabel: PropTypes.func,
   canvasBgColor: PropTypes.string,
   fontColor: PropTypes.string,
+  spriteMaterialColor: PropTypes.object,
   outlineColor: PropTypes.string,
   outOutlineStrokeWidth: PropTypes.number,
   abilityPlateBgColor: PropTypes.string,
@@ -309,14 +228,3 @@ ThreeRadarChart.propTypes = {
 };
 
 export default ThreeRadarChart;
-
-// function difference(object, base) {
-//   return _.transform(object, (result, value, key) => {
-//     if (!_.isEqual(value, base[key])) {
-//       result[key] =
-//         _.isObject(value) && _.isObject(base[key])
-//           ? difference(value, base[key])
-//           : value;
-//     }
-//   });
-// }

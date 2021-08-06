@@ -18,6 +18,7 @@ const BgRadarChart = ({
   numLayer = 3,
   color,
   fontColor,
+  spriteMaterialColor,
   textHeight,
   textStrokeWidth,
   textStrokeColor,
@@ -32,7 +33,6 @@ const BgRadarChart = ({
   setCanvasCursor,
   setCanvasCursorAsDefault,
   handleDeleteDataItem,
-  children,
 }) => {
   return (
     <group>
@@ -42,6 +42,7 @@ const BgRadarChart = ({
         color={color}
         isCenterLineDisplay={true}
         fontColor={fontColor}
+        spriteMaterialColor={spriteMaterialColor}
         textHeight={textHeight}
         textStrokeWidth={textStrokeWidth}
         textStrokeColor={textStrokeColor}

@@ -45,7 +45,7 @@ const BgBlurCanvas = ({
           0,
           width,
           height,
-          width * 0.02,
+          width * 0.04,
           false
         );
       };

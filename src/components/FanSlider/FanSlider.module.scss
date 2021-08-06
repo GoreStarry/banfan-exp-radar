@@ -8,12 +8,15 @@ $vw-viewport: 1080;
 .FanSlider {
   color: #ebe7e1;
   width: 100%;
+  position: relative;
+  z-index: 1;
+  // transform: translateX("-100%");
 }
 
 .banner {
   position: absolute;
   z-index: 1;
-  bottom: get-vw(195px);
+  bottom: get-vw(190px);
   left: 0;
   background-color: #29313b;
   width: 100%;
@@ -25,6 +28,9 @@ $vw-viewport: 1080;
     font-size: get-vw(70px);
     line-height: 1em;
     font-weight: 900;
+    span {
+      font-size: 1.2em;
+    }
   }
   h2 {
     font-size: get-vw(30px);

@@ -54,7 +54,7 @@ const FanIcon = ({ index, className, point, setPoint }) => {
   return (
     <div
       ref={refFanIcon}
-      className={cx(sty.FanIcon, className)}
+      className={cx("FanIcon", sty.FanIcon, className)}
       onMouseDown={onClick}
       // onTouchStart={onTouchMove}
       // onTouchMove={onTouchMove}
