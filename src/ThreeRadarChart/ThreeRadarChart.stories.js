@@ -57,7 +57,9 @@ const Template = ({ data: dataInit, ...args }) => {
   const refContainer = useRef();
   const [data, setData] = useState(dataInit);
   const [isTriggerSaveImage, setIsTriggerSaveImage] = useState(false);
-  const [isFinalScoreMode, setIsFinalScoreMode] = useState(true);
+  const [isFinalScoreMode, setIsFinalScoreMode] = useState(false);
+  const [user_name, setUserName] = useState("");
+  const [point, setPoint] = useState(0);
   const [radarStyles, setRadarStyles] = useState({
     scale: 1.25,
     position: [0.95, 0.8, 0],
@@ -68,6 +70,10 @@ const Template = ({ data: dataInit, ...args }) => {
   } = useResizeContainerSize(refContainer);
   const spriteMaterialColor = useMemo(() => new THREE.Color(10, 10, 10), []);
 
+  const [maxValue, setMaxValue] = useState(5);
+  const unLockMaxValueLimit = useCallback(() => {
+    setMaxValue(10);
+  }, []);
   // const [isMount, setIsMount] = useState(false);
 
   // useEffect(() => {
@@ -221,64 +227,95 @@ const Template = ({ data: dataInit, ...args }) => {
     setIsTriggerSaveImage(false);
   }, []);
 
+  const completeExperience = useCallback(() => {
+    let name;
+    if (!user_name) {
+      name = prompt("暱稱：(選填)", user_name);
+      setUserName(name);
+    }
+    setIsFinalScoreMode(true);
+  }, [user_name]);
+
   return (
-    <div ref={refContainer} className={sty.container}>
-      <BgBlurCanvas
-        width={containerWidth}
-        height={containerHeight}
-        imageUrl={imgBrass}
-      />
-      {imgBrass && <img className={sty.img__cover} src={imgBrass} alt="" />}
-      <img className={sty.img__logo} src={imgLogo} alt="" />
-      <ThreeRadarChart
-        {...args}
-        className={cx(sty.ThreeRadarChart, {
-          [sty.ThreeRadarChart__disable]: isFinalScoreMode,
-        })}
-        data={data}
-        onChangeInputLabel={onChangeInputLabel}
-        onChangeValue={onChangeValue}
-        isTriggerSaveImage={isTriggerSaveImage}
-        onCompleteSaveImage={onCompleteSaveImage}
-        handleDeleteDataItem={deleteDataItem}
-        fontColor="white"
-        spriteMaterialColor={spriteMaterialColor}
-        drawBorderLineColor="#aac3e0"
-        drawBorderLineWidthPercent={0.05}
-        {...radarStyles}
-      />
-      <FanSlider name="工業革命：伯明翰" isOpen={isFinalScoreMode} />
-      {isFinalScoreMode ? (
-        <>
-          <button
-            className={cx(sty.btn, sty.btn__save_img)}
-            onClick={saveImage}
-          >
-            圖片儲存
-          </button>
-          <button
-            className={cx(sty.btn, sty.btn__confirm_radar)}
-            // onClick={() => setIsFinalScoreMode(false)}
-            onClick={() => setIsFinalScoreMode(false)}
-          >
-            返回
-          </button>
-        </>
-      ) : (
-        <>
-          {maxLengthData > data.length && (
-            <button className={cx(sty.btn, sty.btn__add)} onClick={addDataItem}>
-              ＋1維度
+    <div>
+      <div ref={refContainer} className={sty.container}>
+        <BgBlurCanvas
+          width={containerWidth}
+          height={containerHeight}
+          imageUrl={imgBrass}
+        />
+        {imgBrass && <img className={sty.img__cover} src={imgBrass} alt="" />}
+        <img
+          className={sty.img__logo}
+          src={imgLogo}
+          alt="桌遊拌飯"
+          onClick={unLockMaxValueLimit}
+        />
+        <ThreeRadarChart
+          {...args}
+          className={cx(sty.ThreeRadarChart, {
+            [sty.ThreeRadarChart__disable]: isFinalScoreMode,
+          })}
+          data={data}
+          onChangeInputLabel={onChangeInputLabel}
+          onChangeValue={onChangeValue}
+          isTriggerSaveImage={isTriggerSaveImage}
+          onCompleteSaveImage={onCompleteSaveImage}
+          handleDeleteDataItem={deleteDataItem}
+          spriteMaterialColor={spriteMaterialColor}
+          editMaxValue={maxValue}
+          {...radarStyles}
+        />
+        <FanSlider
+          name="工業革命：伯明翰"
+          isOpen={isFinalScoreMode}
+          user_name={user_name}
+          point={point}
+          setPoint={setPoint}
+        />
+      </div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
+      >
+        {isFinalScoreMode ? (
+          <>
+            <button
+              className={cx(sty.btn, sty.btn__confirm_radar)}
+              // onClick={() => setIsFinalScoreMode(false)}
+              onClick={() => setIsFinalScoreMode(false)}
+            >
+              返回編輯
             </button>
-          )}
-          <button
-            className={cx(sty.btn, sty.btn__confirm_radar)}
-            onClick={() => setIsFinalScoreMode(true)}
-          >
-            確認體驗
-          </button>
-        </>
-      )}
+            <button
+              className={cx(sty.btn, sty.btn__save_img)}
+              onClick={saveImage}
+            >
+              圖片儲存
+            </button>
+          </>
+        ) : (
+          <>
+            {maxLengthData > data.length && (
+              <button
+                className={cx(sty.btn, sty.btn__add)}
+                onClick={addDataItem}
+              >
+                ＋1維度
+              </button>
+            )}
+            <button
+              className={cx(sty.btn, sty.btn__confirm_radar)}
+              onClick={completeExperience}
+            >
+              確認體驗
+            </button>
+          </>
+        )}
+      </div>
     </div>
   );
 };

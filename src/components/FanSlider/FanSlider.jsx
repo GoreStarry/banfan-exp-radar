@@ -17,20 +17,29 @@ const {
   utils: { pipe, clamp, mapRange, snap },
 } = gsap;
 
-const FanSlider = ({ isOpen, name, minValue = 0, maxValue = 5 }) => {
-  const [point, setPoint] = useState(0);
-
+const FanSlider = ({
+  isOpen,
+  name,
+  minValue = 0,
+  maxValue = 5,
+  user_name,
+  point,
+  setPoint,
+}) => {
   const refFanSliderBox = useRef();
   const refInitialX = useRef(0);
   const refTimeline = useRef();
+  const [isAnimationDone, setIsAnimationDone] = useState(false);
   const [springFanSlider, setSpringFanSlider] = useSpring(
     () => ({ x: isOpen ? "0%" : "-110%" }),
     [isOpen]
   );
 
   const handleChangePoint = useCallback((val) => {
-    refTimeline.current &&
-      refTimeline.current.clear().set(".FanIcon", { clearProps: "opacity" });
+    if (refTimeline.current) {
+      refTimeline.current.clear();
+      gsap.set(".FanIcon", { opacity: 1 });
+    }
     setPoint(val);
   }, []);
 
@@ -80,19 +89,24 @@ const FanSlider = ({ isOpen, name, minValue = 0, maxValue = 5 }) => {
           duration: 1,
           stagger: { amount: 0.4, repeat: -1, yoyo: true },
           ease: "power1.out",
+          onStart: () => {
+            setIsAnimationDone(true);
+          },
         },
         "start+=1.5"
       );
   }, []);
 
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && !point) {
       animateIn();
+    } else {
+      setIsAnimationDone(false);
     }
     return () => {
       refTimeline.current && refTimeline.current.kill();
     };
-  }, [isOpen]);
+  }, [isOpen, point]);
 
   useEffect(() => {
     refInitialX.current =
@@ -134,7 +148,10 @@ const FanSlider = ({ isOpen, name, minValue = 0, maxValue = 5 }) => {
     <a.div style={springFanSlider} className={sty.FanSlider}>
       <div className={sty.banner}>
         <h2>{name}</h2>
-        <h1>我配 {point || <span>☟</span>} 碗飯！</h1>
+        <h1>
+          我{user_name ? ` ${user_name} ` : null}配 {point || <span>☟</span>}{" "}
+          碗飯！
+        </h1>
       </div>
       <div ref={refFanSliderBox} className={sty.box__fans} {...bind()}>
         {[...Array(5)].map((nulll, index) => (
@@ -143,6 +160,7 @@ const FanSlider = ({ isOpen, name, minValue = 0, maxValue = 5 }) => {
             index={index}
             point={point}
             setPoint={handleChangePoint}
+            isAnimationDone={isAnimationDone}
           />
         ))}
       </div>

@@ -33,6 +33,15 @@ const BgRadarChart = ({
   setCanvasCursor,
   setCanvasCursorAsDefault,
   handleDeleteDataItem,
+  editBarColor,
+  editBarHeight,
+  editDotSize,
+  editDotColor,
+  editMainColor,
+  editMarker,
+  editFontColor,
+  editMaxValue,
+  editStep,
 }) => {
   return (
     <group>
@@ -59,6 +68,15 @@ const BgRadarChart = ({
         blending={THREE.AdditiveBlending}
         isThinLineMode={false}
         outOutlineStrokeWidth={outOutlineStrokeWidth}
+        editBarColor={editBarColor}
+        editBarHeight={editBarHeight}
+        editDotSize={editDotSize}
+        editDotColor={editDotColor}
+        editMainColor={editMainColor}
+        editMarker={editMarker}
+        editFontColor={editFontColor}
+        editMaxValue={editMaxValue}
+        editStep={editStep}
       />
       <group>
         {[...Array(numLayer)].map((nulll, index) => {

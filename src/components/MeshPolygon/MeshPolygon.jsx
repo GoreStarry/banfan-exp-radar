@@ -47,6 +47,15 @@ const MeshPolygon = React.memo(
     setCanvasCursor,
     setCanvasCursorAsDefault,
     handleDeleteDataItem,
+    editBarColor,
+    editBarHeight,
+    editDotSize,
+    editDotColor,
+    editMainColor,
+    editMarker,
+    editFontColor,
+    editMaxValue,
+    editStep,
     ...restProps
   }) => {
     const twoPolygon = useMemo(() => {
@@ -151,6 +160,15 @@ const MeshPolygon = React.memo(
               setCanvasCursor={setCanvasCursor}
               setCanvasCursorAsDefault={setCanvasCursorAsDefault}
               handleDeleteDataItem={handleDeleteDataItem}
+              editBarColor={editBarColor}
+              editBarHeight={editBarHeight}
+              editDotSize={editDotSize}
+              editDotColor={editDotColor}
+              editMainColor={editMainColor}
+              editMarker={editMarker}
+              editFontColor={editFontColor}
+              editMaxValue={editMaxValue}
+              editStep={editStep}
             />
           )}
         </group>

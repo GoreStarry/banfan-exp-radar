@@ -24,12 +24,14 @@ const SpringSlider = ({
   dotSize = "2.2rem",
   dotColor = "white",
   mainColor = "#aac3e0",
+  fontColor = "white",
   value = 0,
   minValue = 0,
   maxValue = 5,
   step = 0.1,
   onChange,
   index,
+  marker = "🍚",
 }) => {
   const refBar = useRef();
 
@@ -101,6 +103,7 @@ const SpringSlider = ({
         "--bar-color": barColor,
         "--bar-height": barHeight,
         "--label-color": mainColor,
+        "--font-color": fontColor,
       }}
     >
       <div
@@ -118,7 +121,7 @@ const SpringSlider = ({
           style={thumbDotSpringProps}
         >
           <a.div style={markSpringProps} className={sty.box__marker}>
-            <div className={sty.marker}>🍚</div>
+            <div className={sty.marker}>{marker}</div>
           </a.div>
           <div className={sty.label__value}>{value}</div>
           <div className={sty.dot_thumb}></div>

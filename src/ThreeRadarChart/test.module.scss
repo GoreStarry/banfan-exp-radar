@@ -60,37 +60,6 @@ body {
   }
 }
 
-.btn {
-  font-size: 1.5rem;
-  line-height: 2rem;
-  border-radius: calc(1.5rem / 2);
-  background-color: white;
-  cursor: pointer;
-  padding: 0.4em 0.6em 0.1em;
-  box-shadow: 0 get-vw(3px) get-vw(1px) rgba(0, 0, 0, 0.1),
-    0 get-vw(4px) get-vw(8px) rgba(0, 0, 0, 0.3),
-    0 0 0 get-vw(1px) rgba(0, 0, 0, 0.02);
-  z-index: 2;
-}
-
-.btn__save_img {
-  position: absolute;
-  right: 0%;
-  bottom: 13vmin;
-}
-
-.btn__confirm_radar {
-  position: absolute;
-  left: 0%;
-  bottom: 13vmin;
-}
-
-.btn__add {
-  position: absolute;
-  right: 0%;
-  bottom: 13vmin;
-}
-
 .img__cover {
   position: absolute;
   left: 5vmin;
@@ -112,4 +81,35 @@ body {
   width: get-vw(194px);
   height: auto;
   z-index: 4;
+}
+
+.btn {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  border-radius: calc(1.5rem / 2);
+  background-color: white;
+  cursor: pointer;
+  padding: 0.4em 0.6em 0.1em;
+  box-shadow: 0 get-vw(3px) get-vw(1px) rgba(0, 0, 0, 0.1),
+    0 get-vw(4px) get-vw(8px) rgba(0, 0, 0, 0.3),
+    0 0 0 get-vw(1px) rgba(0, 0, 0, 0.02);
+  z-index: 2;
+}
+
+.btn__save_img {
+  // position: absolute;
+  right: 0%;
+  bottom: 13vmin;
+}
+
+.btn__confirm_radar {
+  // position: absolute;
+  left: 0%;
+  bottom: 13vmin;
+}
+
+.btn__add {
+  // position: absolute;
+  right: 0%;
+  bottom: 13vmin;
 }

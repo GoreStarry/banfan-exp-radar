@@ -64,6 +64,15 @@ const ThreeRadarChart = ({
   scale = 1.3,
   position = [0, -0.5, 0],
   rotation = [0, 0, 0],
+  editBarColor = "#35ffff",
+  editBarHeight,
+  editDotSize,
+  editDotColor,
+  editMainColor = "#313b47",
+  editMarker,
+  editFontColor = "white",
+  editMaxValue,
+  editStep,
 
   ...restProps
 }) => {
@@ -162,6 +171,14 @@ const ThreeRadarChart = ({
             setCanvasCursor={setCanvasCursor}
             setCanvasCursorAsDefault={setCanvasCursorAsDefault}
             handleDeleteDataItem={handleDeleteDataItem}
+            editBarColor={editBarColor}
+            editBarHeight={editBarHeight}
+            editDotSize={editDotSize}
+            editDotColor={editDotColor}
+            editMainColor={editMainColor}
+            editMarker={editMarker}
+            editMaxValue={editMaxValue}
+            editStep={editStep}
           />
           <AbilityPlate
             data={data}
@@ -225,6 +242,14 @@ ThreeRadarChart.propTypes = {
   abilityPlateBgColor: PropTypes.string,
   abilityPlateColor: PropTypes.string,
   focusPointIndex: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
+  editBarColor: PropTypes.string,
+  editBarHeight: PropTypes.string,
+  editDotSize: PropTypes.string, //px
+  editDotColor: PropTypes.string,
+  editMarker: PropTypes.string,
+  editMainColor: PropTypes.string,
+  editMaxValue: PropTypes.number, // default 5
+  editStep: PropTypes.number, // default 0.1
 };
 
 export default ThreeRadarChart;

@@ -20,15 +20,19 @@ const {
   utils: { pipe, clamp, mapRange, snap },
 } = gsap;
 
-const FanIcon = ({ index, className, point, setPoint }) => {
+const FanIcon = ({ index, className, point, setPoint, isAnimationDone }) => {
   const refFanIcon = useRef();
   const refFanIconLeft = useRef();
   const { width, height } = useWindowSize();
 
   useEffect(() => {
-    refFanIconLeft.current = mezr.offset(refFanIcon.current).left;
+    if (isAnimationDone) {
+      setTimeout(() => {
+        refFanIconLeft.current = mezr.offset(refFanIcon.current).left;
+      }, 0);
+    }
     return () => {};
-  }, [width, height]);
+  }, [width, height, isAnimationDone]);
 
   const nowPercentage = useMemo(() => {
     return clamp(index, index + 1, point) - index;

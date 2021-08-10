@@ -31,6 +31,15 @@ const EditLabel = React.forwardRef(
       verticalAlign, // top, bottom, center
       handleDeleteDataItem,
       isDeleteAble,
+      editBarColor,
+      editBarHeight,
+      editDotSize,
+      editDotColor,
+      editMainColor,
+      editMarker,
+      editFontColor,
+      editMaxValue,
+      editStep,
     },
     ref
   ) => {
@@ -75,7 +84,16 @@ const EditLabel = React.forwardRef(
               value={value}
               onChange={onChangeValue}
               index={index}
-
+              barColor={editBarColor}
+              barHeight={editBarHeight}
+              dotSize={editDotSize}
+              dotColor={editDotColor}
+              mainColor={editMainColor}
+              editMarker={editMarker}
+              fontColor={editFontColor}
+              maxValue={editMaxValue}
+              step={editStep}
+              marker={editMarker}
               // scaleContainer={distanceFactor}
             />
           </div>

@@ -28,6 +28,15 @@ const Label = ({
   distanceFactor = 10,
   handleDeleteDataItem,
   isDeleteAble,
+  editBarColor,
+  editBarHeight,
+  editDotSize,
+  editDotColor,
+  editMainColor,
+  editMarker,
+  editFontColor,
+  editMaxValue,
+  editStep,
   ...restProps
 }) => {
   const [isEditMode, setIsEditMode] = useState(mode === "edit");
@@ -115,6 +124,15 @@ const Label = ({
       verticalAlign={verticalAlign}
       handleDeleteDataItem={handleDeleteDataItem}
       isDeleteAble={isDeleteAble}
+      editBarColor={editBarColor}
+      editBarHeight={editBarHeight}
+      editDotSize={editDotSize}
+      editDotColor={editDotColor}
+      editMainColor={editMainColor}
+      editFontColor={editFontColor}
+      editMarker={editMarker}
+      editMaxValue={editMaxValue}
+      editStep={editStep}
     />
   ) : (
     <SpriteText
