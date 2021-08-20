@@ -12966,8 +12966,8 @@ react-use-measure@^2.0.4:
     debounce "^1.2.0"
 
 react-use-object-fit@GoreStarry/react-use-object-fit:
-  version "0.1.4"
-  resolved "https://codeload.github.com/GoreStarry/react-use-object-fit/tar.gz/987954daeffe115c24f2d2f6d3037f658bfbe566"
+  version "0.2.0"
+  resolved "https://codeload.github.com/GoreStarry/react-use-object-fit/tar.gz/09feae62b67fcb0d95c3754961d9bdc563c928ab"
 
 react-use@^17.2.4:
   version "17.2.4"

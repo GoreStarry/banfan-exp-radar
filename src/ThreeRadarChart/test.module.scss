@@ -18,12 +18,16 @@ body {
   align-items: center;
 }
 
-.container {
+.BanfanRadar {
   position: relative;
   width: 100vmin;
   height: 100vmin;
-  overflow: hidden;
+}
 
+.container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
   &::before,
   &::after {
     position: absolute;
@@ -60,56 +64,59 @@ body {
   }
 }
 
-.img__cover {
-  position: absolute;
-  left: 5vmin;
-  top: 5vmin;
-  width: 30vmin;
-  height: 30vmin;
-  object-fit: contain;
-  z-index: 1;
-  box-shadow: 0 get-vw(2px) get-vw(26px) 0 rgba(0, 0, 0, 0.5);
-  border: solid get-vw(3px) #ffffff;
-  opacity: 1;
-  // opacity: 0.5;
-}
-
-.img__logo {
-  position: absolute;
-  right: get-vw(53px);
-  bottom: get-vw(57px);
-  width: get-vw(194px);
-  height: auto;
-  z-index: 4;
-}
-
 .btn {
-  font-size: 1.5rem;
-  line-height: 2rem;
+  line-height: get-vw(60px);
   border-radius: calc(1.5rem / 2);
-  background-color: white;
+  background-color: #be4c0f;
+  color: white;
+
   cursor: pointer;
-  padding: 0.4em 0.6em 0.1em;
+  padding: 0.4em 1em 0.1em;
   box-shadow: 0 get-vw(3px) get-vw(1px) rgba(0, 0, 0, 0.1),
     0 get-vw(4px) get-vw(8px) rgba(0, 0, 0, 0.3),
     0 0 0 get-vw(1px) rgba(0, 0, 0, 0.02);
-  z-index: 2;
+  z-index: 3;
 }
 
 .btn__save_img {
   // position: absolute;
-  right: 0%;
+  right: get-vw(33px);
   bottom: 13vmin;
 }
 
-.btn__confirm_radar {
-  // position: absolute;
-  left: 0%;
-  bottom: 13vmin;
+// .btn__confirm_radar {
+//   position: absolute;
+//   // right: get-vw(33px);
+//   // bottom: get-vw(150px);
+//   left: 50%;
+//   transform: translateX(-50%);
+//   bottom: get-vw(20px);
+// }
+
+.btn__add,
+.btn__back {
+  position: absolute;
+  right: get-vw(25px);
+  // bottom: get-vw(140px);
+  top: get-vw(250px);
+  font-size: get-vw(32px);
 }
 
-.btn__add {
-  // position: absolute;
-  right: 0%;
-  bottom: 13vmin;
+.btn__confirm_radar,
+.btn__save_img {
+  position: absolute;
+  right: get-vw(25px);
+  bottom: get-vw(20px);
+  font-size: get-vw(36px);
+}
+
+.btn__save_img {
+  opacity: 0;
+  transition: 0.3s linear;
+  transform: translateX(-50%);
+}
+
+.btn__fadeIn {
+  opacity: 1;
+  transform: translateX(0%);
 }

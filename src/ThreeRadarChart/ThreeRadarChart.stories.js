@@ -25,8 +25,8 @@ import BgBlurCanvas from "../components/BgBlurCanvas";
 import sty from "./test.module.scss";
 import "css-reset-and-normalize/css/reset-and-normalize.min.css";
 import "css-reset-and-normalize/css/button-reset.min.css";
-import imgLogo from "./images/logo.png";
-import imgBrass from "./images/game/brass.jpg";
+
+import imgBrass from "./images/game/pic3727516.webp";
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
@@ -60,10 +60,24 @@ const Template = ({ data: dataInit, ...args }) => {
   const [isFinalScoreMode, setIsFinalScoreMode] = useState(false);
   const [user_name, setUserName] = useState("");
   const [point, setPoint] = useState(0);
+
+  const radarPositionMap = useMemo(
+    () => ({
+      3: { scale: 1.5, finScale: 1.65, position: [0, -0.8, 0] },
+      4: { scale: 1.35, finScale: 1.45, position: [0, -0.3, 0] },
+      5: { scale: 1.35, finScale: 1.45, position: [0, -0.5, 0] },
+      6: { scale: 1.35, finScale: 1.45, position: [0, -0.3, 0] },
+      7: { scale: 1.35, finScale: 1.45, position: [0, -0.5, 0] },
+      8: { scale: 1.35, finScale: 1.45, position: [0, -0.3, 0] },
+    }),
+    []
+  );
+
   const [radarStyles, setRadarStyles] = useState({
-    scale: 1.25,
-    position: [0.95, 0.8, 0],
+    scale: radarPositionMap[data?.length]?.scale,
+    position: radarPositionMap[data?.length]?.position,
   });
+
   const {
     width: containerWidth,
     height: containerHeight,
@@ -80,17 +94,16 @@ const Template = ({ data: dataInit, ...args }) => {
   //   setIsMount(true);
   //   return () => {};
   // }, []);
-  const radarPositionMap = useMemo(
-    () => ({
-      3: { scale: 1.4, position: [0.65, 0.65, 0] },
-      4: { scale: 1.35, position: [0.65, 0.6, 0] },
-      5: { scale: 1.15, position: [0.95, 0.85, 0] },
-      6: { scale: 1.22, position: [0.95, 1, 0] },
-      7: { scale: 1.1, position: [0.95, 0.9, 0] },
-      8: { scale: 1.1, position: [0.98, 1, 0] },
-    }),
-    []
-  );
+
+  useEffect(() => {
+    const { position, scale } = radarPositionMap[data.length];
+    console.log(position);
+    setRadarStyles({
+      scale,
+      position,
+    });
+    return () => {};
+  }, [data.length]);
 
   useEffect(() => {
     if (isFinalScoreMode) {
@@ -98,20 +111,21 @@ const Template = ({ data: dataInit, ...args }) => {
         isClickOutLabel: true,
         isResetCamera: true,
       });
-      const { position, scale } = radarPositionMap[data.length];
+      const { finScale, scale, position } = radarPositionMap[data.length];
       setRadarStyles({
-        scale,
+        scale: scale,
         position,
-        rotation: [0.1, 2 * Math.PI - 0.1, 0.01],
+        rotation: [0, 2 * Math.PI, 0],
       });
     } else {
-      setRadarStyles({ scale: 1.3, position: [0, -0.5, 0] });
+      const { scale, position } = radarPositionMap[data.length];
+      setRadarStyles({ scale, position, rotation: [0, 0, 0] });
     }
     return () => {};
   }, [isFinalScoreMode]);
 
   // const { width: winWidth, height: winHeight } = useWindowSize();
-  const maxLengthData = 8;
+  const maxLengthData = 6;
 
   // const [bggGameCover, setBggGameCover] = useState();
   // const [drawImageList, setDrawImageList] = useState([]);
@@ -237,7 +251,7 @@ const Template = ({ data: dataInit, ...args }) => {
   }, [user_name]);
 
   return (
-    <div>
+    <div className={sty.BanfanRadar}>
       <div ref={refContainer} className={sty.container}>
         <BgBlurCanvas
           width={containerWidth}
@@ -245,12 +259,6 @@ const Template = ({ data: dataInit, ...args }) => {
           imageUrl={imgBrass}
         />
         {imgBrass && <img className={sty.img__cover} src={imgBrass} alt="" />}
-        <img
-          className={sty.img__logo}
-          src={imgLogo}
-          alt="桌遊拌飯"
-          onClick={unLockMaxValueLimit}
-        />
         <ThreeRadarChart
           {...args}
           className={cx(sty.ThreeRadarChart, {
@@ -267,11 +275,13 @@ const Template = ({ data: dataInit, ...args }) => {
           {...radarStyles}
         />
         <FanSlider
-          name="工業革命：伯明翰"
+          name="帝國曙光 第4版"
+          coverImg={imgBrass}
           isOpen={isFinalScoreMode}
           user_name={user_name}
           point={point}
           setPoint={setPoint}
+          unLockMaxValueLimit={unLockMaxValueLimit}
         />
       </div>
       <div
@@ -284,14 +294,16 @@ const Template = ({ data: dataInit, ...args }) => {
         {isFinalScoreMode ? (
           <>
             <button
-              className={cx(sty.btn, sty.btn__confirm_radar)}
+              className={cx(sty.btn, sty.btn__back)}
               // onClick={() => setIsFinalScoreMode(false)}
               onClick={() => setIsFinalScoreMode(false)}
             >
               返回編輯
             </button>
             <button
-              className={cx(sty.btn, sty.btn__save_img)}
+              className={cx(sty.btn, sty.btn__save_img, {
+                [sty.btn__fadeIn]: !!point,
+              })}
               onClick={saveImage}
             >
               圖片儲存

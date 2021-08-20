@@ -8,10 +8,12 @@ import React, {
 import PropTypes from "prop-types";
 import gsap from "gsap";
 import { a, useSpring } from "react-spring";
+import useObjectFit from "react-use-object-fit";
 
 import sty from "./FanSlider.module.scss";
 import FanIcon from "./FanIcon";
 import { useDrag } from "react-use-gesture";
+import imgLogo from "./images/logo.png";
 
 const {
   utils: { pipe, clamp, mapRange, snap },
@@ -25,20 +27,42 @@ const FanSlider = ({
   user_name,
   point,
   setPoint,
+  coverImg,
+  unLockMaxValueLimit,
 }) => {
   const refFanSliderBox = useRef();
   const refInitialX = useRef(0);
   const refTimeline = useRef();
+  const isRefAlreadyEdit = useRef(false);
+
+  const refCoverContainer = useRef();
   const [isAnimationDone, setIsAnimationDone] = useState(false);
+
   const [springFanSlider, setSpringFanSlider] = useSpring(
     () => ({ x: isOpen ? "0%" : "-110%" }),
     [isOpen]
   );
 
+  const {
+    width: coverWidth,
+    height: coverHeight,
+    ratio,
+    offsetX,
+    offsetY,
+    imgWidth,
+    imgHeight,
+  } = useObjectFit({
+    type: "cover",
+    imgUrl: coverImg,
+    container: { ref: refCoverContainer.current && refCoverContainer },
+  });
+
   const handleChangePoint = useCallback((val) => {
     if (refTimeline.current) {
+      isRefAlreadyEdit.current = true;
       refTimeline.current.clear();
       gsap.set(".FanIcon", { opacity: 1 });
+      gsap.timeline().to("#hint", { opacity: 0, yPercent: -100 });
     }
     setPoint(val);
   }, []);
@@ -53,7 +77,7 @@ const FanSlider = ({
         ".FanIcon",
         {
           // opacity: 0,
-          y: "-510%",
+          y: "-150%",
         },
         {
           // opacity: 1,
@@ -94,11 +118,23 @@ const FanSlider = ({
           },
         },
         "start+=1.5"
+      )
+      .fromTo(
+        "#hint",
+        {
+          opacity: 0,
+          yPercent: 50,
+        },
+        {
+          opacity: 1,
+          yPercent: 0,
+        },
+        "start+=1.5"
       );
   }, []);
 
   useEffect(() => {
-    if (isOpen && !point) {
+    if (isOpen && !point && !isRefAlreadyEdit.current) {
       animateIn();
     } else {
       setIsAnimationDone(false);
@@ -145,26 +181,54 @@ const FanSlider = ({
   );
 
   return (
-    <a.div style={springFanSlider} className={sty.FanSlider}>
-      <div className={sty.banner}>
-        <h2>{name}</h2>
-        <h1>
-          我{user_name ? ` ${user_name} ` : null}配 {point || <span>☟</span>}{" "}
-          碗飯！
-        </h1>
+    <>
+      <header className={sty.header}>
+        <h3> {`${user_name ? user_name + " " : "我"}的體驗雷達`}</h3>
+        <h1>{name}</h1>
+      </header>
+
+      <div ref={refCoverContainer} className={sty.container__cover}>
+        <img
+          className={sty.img__cover}
+          style={{ width: coverWidth, height: coverHeight }}
+          src={coverImg}
+          alt={name}
+        />
       </div>
-      <div ref={refFanSliderBox} className={sty.box__fans} {...bind()}>
-        {[...Array(5)].map((nulll, index) => (
-          <FanIcon
-            key={index}
-            index={index}
-            point={point}
-            setPoint={handleChangePoint}
-            isAnimationDone={isAnimationDone}
-          />
-        ))}
+      <div className={sty.FanSlider}>
+        <div className={sty.container__slider}>
+          <a.div
+            style={springFanSlider}
+            ref={refFanSliderBox}
+            className={sty.box__fans}
+            {...bind()}
+          >
+            {[...Array(5)].map((nulll, index) => (
+              <FanIcon
+                key={index}
+                index={index}
+                point={point}
+                setPoint={handleChangePoint}
+                isAnimationDone={isAnimationDone}
+              />
+            ))}
+          </a.div>
+          {isOpen && !!point && (
+            <span className={sty.span__point}> / {point}</span>
+          )}
+        </div>
+        <div id="hint" className={sty.bubble}>
+          你給幾碗飯！？
+        </div>
+
+        <img
+          className={sty.img__logo}
+          src={imgLogo}
+          alt="桌遊拌飯"
+          onClick={unLockMaxValueLimit}
+        />
       </div>
-    </a.div>
+    </>
   );
 };
 
