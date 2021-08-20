@@ -129,7 +129,7 @@ const FanSlider = ({
           opacity: 1,
           yPercent: 0,
         },
-        "start+=1.5"
+        "start+=1"
       );
   }, []);
 
@@ -218,7 +218,7 @@ const FanSlider = ({
           )}
         </div>
         <div id="hint" className={sty.bubble}>
-          你給幾碗飯！？
+          你給幾碗飯！
         </div>
 
         <img
