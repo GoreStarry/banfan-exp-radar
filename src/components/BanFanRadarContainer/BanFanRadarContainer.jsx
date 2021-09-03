@@ -79,6 +79,10 @@ const BanFanRadarContainer = ({
     const urlParams = new URLSearchParams(queryString);
     const gameID = urlParams.get("id");
 
+    refContainer.current.addEventListener("touchmove", function (e) {
+      e.preventDefault();
+    });
+
     axios
       .get(`https://slides-together.vercel.app/api/getRadarTopic?id=${gameID}`)
       .then(({ data: { name, imgUrl } }) => {

@@ -13,6 +13,7 @@ body {
   padding: 0 !important;
   box-sizing: border-box;
   background: #161d26;
+  overscroll-behavior: none;
 }
 
 :global(#root) {
