@@ -28,16 +28,15 @@ import "css-reset-and-normalize/css/button-reset.min.css";
 
 const BanFanRadarContainer = ({
   data: dataInit = [
-    { name: "主題", value: 3 },
     { name: "美術", value: 3 },
-    { name: "策略", value: 1 },
-    { name: "帶入感！", value: 1 },
-    { name: "吃豆腐？", value: 1 },
+    { name: "策略？", value: 3 },
+    { name: "？？？", value: 1 },
   ],
   ...args
 }) => {
   const [imgUrlGameCover, setImgUrlGameCover] = useState();
   const [gameName, setGameName] = useState("Loading...");
+  const [savedImgDataURL, setSavedImgDataURL] = useState();
 
   const refContainer = useRef();
   const [data, setData] = useState(dataInit);
@@ -45,6 +44,7 @@ const BanFanRadarContainer = ({
   const [isFinalScoreMode, setIsFinalScoreMode] = useState(false);
   const [user_name, setUserName] = useState("");
   const [point, setPoint] = useState(0);
+  const [isSaveImageMode, setIsSaveImageMode] = useState(false);
 
   const radarPositionMap = useMemo(
     () => ({
@@ -166,10 +166,10 @@ const BanFanRadarContainer = ({
       // document.body.appendChild(canvas);
       if (isIOS) {
         alert("iOS 請長壓圖片，加入「照片」");
-        window.location.href = canvas
-          .toDataURL("image/jpeg", 1.0)
-          .replace("image/jpeg", "image/octet-stream");
+        setSavedImgDataURL(canvas.toDataURL("image/jpeg", 1.0));
+        setIsSaveImageMode(true);
       } else {
+        // setSavedImgDataURL(canvas.toDataURL("image/jpeg", 1.0));
         canvasToImage(canvas, {
           name: "myImage",
           type: "jpg",
@@ -197,44 +197,48 @@ const BanFanRadarContainer = ({
 
   return (
     <div className={sty.BanfanRadar}>
-      <div ref={refContainer} className={sty.container}>
-        {imgUrlGameCover && (
-          <BgBlurCanvas
-            width={containerWidth}
-            height={containerHeight}
-            imageUrl={imgUrlGameCover}
+      {savedImgDataURL ? (
+        <img src={savedImgDataURL} alt={gameName} className={sty.img__saved} />
+      ) : (
+        <div ref={refContainer} className={sty.container}>
+          {imgUrlGameCover && (
+            <BgBlurCanvas
+              width={containerWidth}
+              height={containerHeight}
+              imageUrl={imgUrlGameCover}
+            />
+          )}
+          {imgUrlGameCover && (
+            <img className={sty.img__cover} src={imgUrlGameCover} alt="" />
+          )}
+          <ThreeRadarChart
+            {...args}
+            className={cx(sty.ThreeRadarChart, {
+              [sty.ThreeRadarChart__disable]: isFinalScoreMode,
+            })}
+            data={data}
+            onChangeInputLabel={onChangeInputLabel}
+            onChangeValue={onChangeValue}
+            isTriggerSaveImage={isTriggerSaveImage}
+            onCompleteSaveImage={onCompleteSaveImage}
+            handleDeleteDataItem={deleteDataItem}
+            spriteMaterialColor={spriteMaterialColor}
+            editMaxValue={maxValue}
+            {...radarStyles}
           />
-        )}
-        {imgUrlGameCover && (
-          <img className={sty.img__cover} src={imgUrlGameCover} alt="" />
-        )}
-        <ThreeRadarChart
-          {...args}
-          className={cx(sty.ThreeRadarChart, {
-            [sty.ThreeRadarChart__disable]: isFinalScoreMode,
-          })}
-          data={data}
-          onChangeInputLabel={onChangeInputLabel}
-          onChangeValue={onChangeValue}
-          isTriggerSaveImage={isTriggerSaveImage}
-          onCompleteSaveImage={onCompleteSaveImage}
-          handleDeleteDataItem={deleteDataItem}
-          spriteMaterialColor={spriteMaterialColor}
-          editMaxValue={maxValue}
-          {...radarStyles}
-        />
-        {imgUrlGameCover && (
-          <FanSlider
-            name={gameName}
-            coverImg={imgUrlGameCover}
-            isOpen={isFinalScoreMode}
-            user_name={user_name}
-            point={point}
-            setPoint={setPoint}
-            unLockMaxValueLimit={unLockMaxValueLimit}
-          />
-        )}
-      </div>
+          {imgUrlGameCover && (
+            <FanSlider
+              name={gameName}
+              coverImg={imgUrlGameCover}
+              isOpen={isFinalScoreMode}
+              user_name={user_name}
+              point={point}
+              setPoint={setPoint}
+              unLockMaxValueLimit={unLockMaxValueLimit}
+            />
+          )}
+        </div>
+      )}
       <div
         style={{
           display: "flex",
@@ -242,42 +246,43 @@ const BanFanRadarContainer = ({
           justifyContent: "space-between",
         }}
       >
-        {isFinalScoreMode ? (
-          <>
-            <button
-              className={cx(sty.btn, sty.btn__back)}
-              // onClick={() => setIsFinalScoreMode(false)}
-              onClick={() => setIsFinalScoreMode(false)}
-            >
-              返回編輯
-            </button>
-            <button
-              className={cx(sty.btn, sty.btn__save_img, {
-                [sty.btn__fadeIn]: !!point,
-              })}
-              onClick={saveImage}
-            >
-              圖片儲存
-            </button>
-          </>
-        ) : (
-          <>
-            {maxLengthData > data.length && (
+        {!isSaveImageMode &&
+          (isFinalScoreMode ? (
+            <>
               <button
-                className={cx(sty.btn, sty.btn__add)}
-                onClick={addDataItem}
+                className={cx(sty.btn, sty.btn__back)}
+                // onClick={() => setIsFinalScoreMode(false)}
+                onClick={() => setIsFinalScoreMode(false)}
               >
-                ＋1維度
+                返回編輯
               </button>
-            )}
-            <button
-              className={cx(sty.btn, sty.btn__confirm_radar)}
-              onClick={completeExperience}
-            >
-              確認體驗
-            </button>
-          </>
-        )}
+              <button
+                className={cx(sty.btn, sty.btn__save_img, {
+                  [sty.btn__fadeIn]: !!point,
+                })}
+                onClick={saveImage}
+              >
+                圖片儲存
+              </button>
+            </>
+          ) : (
+            <>
+              {maxLengthData > data.length && (
+                <button
+                  className={cx(sty.btn, sty.btn__add)}
+                  onClick={addDataItem}
+                >
+                  ＋1維度
+                </button>
+              )}
+              <button
+                className={cx(sty.btn, sty.btn__confirm_radar)}
+                onClick={completeExperience}
+              >
+                確認體驗
+              </button>
+            </>
+          ))}
       </div>
     </div>
   );

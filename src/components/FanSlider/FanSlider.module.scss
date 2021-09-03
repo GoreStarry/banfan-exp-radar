@@ -130,7 +130,7 @@ $vw-viewport: 1080;
   border-style: solid;
   border-width: $size $size 0 0;
   border-color: #be4c0f transparent transparent transparent;
-  bottom: #{-1 * $size};
+  bottom: calc(#{-1 * $size} + 1px);
   left: 20%;
   margin-left: -10px;
 }

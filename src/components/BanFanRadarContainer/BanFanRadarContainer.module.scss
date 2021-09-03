@@ -12,6 +12,7 @@ body {
   // background-color: black;
   padding: 0 !important;
   box-sizing: border-box;
+  background: #161d26;
 }
 
 :global(#root) {
@@ -19,15 +20,18 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #161d26;
-  min-height: 100vh;
 }
 
 .BanfanRadar {
   position: relative;
   width: 100vmin;
   height: 100vmin;
-  overflow: hidden;
+  // overflow: hidden;
+}
+
+.img__saved {
+  width: 100%;
+  height: 100%;
 }
 
 .container {

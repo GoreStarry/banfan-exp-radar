@@ -34,8 +34,11 @@ const FanSlider = ({
   const refInitialX = useRef(0);
   const refTimeline = useRef();
   const isRefAlreadyEdit = useRef(false);
+  const refCoverCanvas = useRef();
 
   const refCoverContainer = useRef();
+
+  const refIsFadeInDone = useRef(false);
   const [isAnimationDone, setIsAnimationDone] = useState(false);
 
   const [springFanSlider, setSpringFanSlider] = useSpring(
@@ -57,14 +60,38 @@ const FanSlider = ({
     container: { ref: refCoverContainer.current && refCoverContainer },
   });
 
-  const handleChangePoint = useCallback((val) => {
-    if (refTimeline.current) {
-      isRefAlreadyEdit.current = true;
-      refTimeline.current.clear();
-      gsap.set(".FanIcon", { opacity: 1 });
-      gsap.timeline().to("#hint", { opacity: 0, yPercent: -100 });
+  useEffect(() => {
+    if (coverWidth && coverHeight) {
+      const ctx = refCoverCanvas.current.getContext("2d");
+      // ctx.filter = `blur(${width * 0.02}px)`; // safari not support
+
+      let img = new Image();
+      img.crossOrigin = "anonymous";
+
+      var resizedCanvas = document.createElement("canvas");
+      resizedCanvas.width = coverWidth;
+      resizedCanvas.height = coverHeight;
+
+      img.onload = () => {
+        ctx.drawImage(img, 0, 0, coverWidth, coverHeight);
+      };
+      img.src = coverImg;
     }
-    setPoint(val);
+    return () => {};
+  }, [coverWidth, coverHeight]);
+
+  const handleChangePoint = useCallback((val) => {
+    console.log(refIsFadeInDone.current);
+
+    if (refIsFadeInDone.current) {
+      if (refTimeline.current) {
+        isRefAlreadyEdit.current = true;
+        refTimeline.current.clear();
+        gsap.set(".FanIcon", { opacity: 1 });
+        gsap.timeline().to("#hint", { opacity: 0, yPercent: -100 });
+      }
+      setPoint(val);
+    }
   }, []);
 
   const snapValue = useCallback(snap(0.1), []);
@@ -114,6 +141,8 @@ const FanSlider = ({
           stagger: { amount: 0.4, repeat: -1, yoyo: true },
           ease: "power1.out",
           onStart: () => {
+            console.log("onStart");
+            refIsFadeInDone.current = true;
             setIsAnimationDone(true);
           },
         },
@@ -135,6 +164,7 @@ const FanSlider = ({
 
   useEffect(() => {
     if (isOpen && !point && !isRefAlreadyEdit.current) {
+      refIsFadeInDone.current = false;
       animateIn();
     } else {
       setIsAnimationDone(false);
@@ -188,14 +218,23 @@ const FanSlider = ({
       </header>
 
       <div ref={refCoverContainer} className={sty.container__cover}>
-        <img
+        {/* <img
           className={sty.img__cover}
           style={{ width: coverWidth, height: coverHeight }}
           src={coverImg}
           alt={name}
+        /> */}
+        <canvas
+          ref={refCoverCanvas}
+          width={coverWidth}
+          height={coverHeight}
+          className={sty.img__cover}
         />
       </div>
-      <div className={sty.FanSlider}>
+      <div
+        className={sty.FanSlider}
+        style={{ pointerEvents: isOpen ? "initial" : "none" }}
+      >
         <div className={sty.container__slider}>
           <a.div
             style={springFanSlider}
