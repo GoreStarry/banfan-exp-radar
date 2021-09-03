@@ -166,7 +166,9 @@ const BanFanRadarContainer = ({
       // document.body.appendChild(canvas);
       if (isIOS) {
         alert("iOS 請長壓圖片，加入「照片」");
-        window.location.href = canvas.toDataURL("image/jpeg", 1.0);
+        window.location.href = canvas
+          .toDataURL("image/jpeg", 1.0)
+          .replace("image/jpeg", "image/octet-stream");
       } else {
         canvasToImage(canvas, {
           name: "myImage",
