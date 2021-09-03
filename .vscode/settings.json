@@ -1,6 +1,5 @@
 {
-  "liveServer.settings.root": "/docs",
-  "cSpell.words": [
-    "Autosize"
-  ]
+  // "liveServer.settings.root": "/docs",
+  "liveServer.settings.root": "/build",
+  "cSpell.words": ["Autosize"]
 }
