@@ -231,12 +231,12 @@ const SpriteText = React.memo(
         position[2],
       ],
       left: [
-        position[0] + scale[0] / 3 + scale[1] / 3 + 0.04,
+        position[0] + scale[0] / 3 + scale[1] / 3 + 0.08,
         position[1],
         position[2],
       ],
       right: [
-        position[0] - scale[0] / 3 - scale[1] / 3 - 0.04,
+        position[0] - scale[0] / 3 - scale[1] / 3 - 0.08,
         position[1],
         position[2],
       ],

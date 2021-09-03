@@ -18,7 +18,8 @@
     "start": "react-scripts start",
     "build-lib": "rollup -c",
     "build-lib-watch": "rollup -c -w",
-    "build-app": "react-scripts build && mv -f build/* docs",
+    "build-app": "react-scripts build",
+    "build-app-origin": "react-scripts build && mv -f build/* docs",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "dev": "npm-run-all --parallel build-lib-watch storybook",
@@ -30,6 +31,7 @@
   "dependencies": {
     "@react-three/drei": "4.3.2",
     "@react-three/fiber": "6.0.13",
+    "axios": "^0.21.1",
     "canvas-to-image": "^2.2.0",
     "css-reset-and-normalize": "^2.3.5",
     "gsap": "^3.7.1",

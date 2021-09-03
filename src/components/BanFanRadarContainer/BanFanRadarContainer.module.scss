@@ -1,0 +1,128 @@
+.BanFanRadarContainer {
+}
+
+$vw-viewport: 1080;
+
+@function get-vw($font, $cus-viewport: null) {
+  $vw-context: $vw-viewport * 0.01 * 1px;
+  @return $font / $vw-context * 1vmin;
+}
+
+body {
+  // background-color: black;
+  padding: 0 !important;
+  box-sizing: border-box;
+}
+
+:global(#root) {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #161d26;
+  min-height: 100vh;
+}
+
+.BanfanRadar {
+  position: relative;
+  width: 100vmin;
+  height: 100vmin;
+  overflow: hidden;
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  &::before,
+  &::after {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    content: "";
+    display: block;
+  }
+
+  &::before {
+    // background-image: url("./images/game/brass.jpg");
+    // filter: blur(c(19px));
+    // background-size: cover;
+  }
+  &::after {
+    // position: absolute;
+    // z-index: 100;
+    opacity: 0.68;
+    background-image: linear-gradient(225deg, #5d85b3 0%, #37495c 100%);
+  }
+}
+
+.ThreeRadarChart {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  &__disable {
+    pointer-events: none;
+  }
+}
+
+.btn {
+  line-height: get-vw(60px);
+  border-radius: calc(1.5rem / 2);
+  background-color: #be4c0f;
+  color: white;
+
+  cursor: pointer;
+  padding: 0.4em 1em 0.1em;
+  box-shadow: 0 get-vw(3px) get-vw(1px) rgba(0, 0, 0, 0.1),
+    0 get-vw(4px) get-vw(8px) rgba(0, 0, 0, 0.3),
+    0 0 0 get-vw(1px) rgba(0, 0, 0, 0.02);
+  z-index: 3;
+}
+
+.btn__save_img {
+  // position: absolute;
+  right: get-vw(33px);
+  bottom: 13vmin;
+}
+
+// .btn__confirm_radar {
+//   position: absolute;
+//   // right: get-vw(33px);
+//   // bottom: get-vw(150px);
+//   left: 50%;
+//   transform: translateX(-50%);
+//   bottom: get-vw(20px);
+// }
+
+.btn__add,
+.btn__back {
+  position: absolute;
+  right: get-vw(25px);
+  // bottom: get-vw(140px);
+  top: get-vw(250px);
+  font-size: get-vw(32px);
+}
+
+.btn__confirm_radar,
+.btn__save_img {
+  position: absolute;
+  right: get-vw(25px);
+  bottom: get-vw(20px);
+  font-size: get-vw(36px);
+}
+
+.btn__save_img {
+  opacity: 0;
+  transition: 0.3s linear;
+  transform: translateX(-50%);
+}
+
+.btn__fadeIn {
+  opacity: 1;
+  transform: translateX(0%);
+}
