@@ -6,8 +6,8 @@ import React, {
   useEffect,
 } from "react";
 import cx from "classnames";
-import { getBggThing } from "bgg-xml-api-client";
-import { useStateValidator, useWindowSize } from "react-use";
+// import { getBggThing } from "bgg-xml-api-client";
+// import { useStateValidator, useWindowSize } from "react-use";
 import useStore from "../../store/useStore";
 import html2canvas from "html2canvas";
 import canvasToImage from "canvas-to-image";

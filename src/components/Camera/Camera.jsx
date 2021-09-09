@@ -10,6 +10,7 @@ import { useThree, useFrame } from "@react-three/fiber";
 import { PerspectiveCamera, OrbitControls } from "@react-three/drei";
 import Two from "two.js";
 import shallow from "zustand/shallow";
+import { useWindowSize } from "react-use";
 
 import useStore from "../../store/useStore.js";
 import useResetCamera from "./useResetCamera.js";
@@ -33,6 +34,7 @@ const Camera = React.memo(
     const refCamera = useRef(null);
     const didMount = useRef(false);
     const refOrbitControls = useRef(null);
+    const { width, height } = useWindowSize();
     // const defaultCameraPosition = [-8, 8, 6]
 
     const { isClickOutLabel, isResetCamera, focusPointIndex } = useStore(
@@ -49,8 +51,8 @@ const Camera = React.memo(
 
     const resetCamera = useResetCamera({
       defaultPosition: defaultCameraPosition,
-      refControls: refOrbitControls,
       defaultCameraLookAtPosition,
+      refControls: refOrbitControls,
       refCamera,
     });
 
@@ -63,7 +65,7 @@ const Camera = React.memo(
         });
       }
       return () => {};
-    }, [isClickOutLabel, isResetCamera]);
+    }, [isClickOutLabel, isResetCamera, resetCamera]);
 
     useEffect(() => {
       if (isPreloadDone) {
@@ -76,7 +78,7 @@ const Camera = React.memo(
         }, 5000);
       }
       return () => {};
-    }, [isPreloadDone]);
+    }, [isPreloadDone, resetCamera]);
 
     const listFocusPointPositionList = useMemo(() => {
       const twoPolygon = new Two.Polygon(
@@ -101,6 +103,7 @@ const Camera = React.memo(
     }, [numAbility, lengthRadius]);
 
     useEffect(() => {
+      // console.log(focusPointIndex, listFocusPointPositionList);
       if (!didMount.current) {
         didMount.current = true;
       } else if (focusPointIndex !== false && listFocusPointPositionList) {
@@ -111,15 +114,20 @@ const Camera = React.memo(
         );
       }
       return () => {};
-    }, [focusPointIndex, listFocusPointPositionList]);
+    }, [focusPointIndex, listFocusPointPositionList, resetCamera]);
+
+    const { key, args } = useMemo(() => {
+      return { key: width * height, args: [60, width / height, 1, 2000] };
+    }, [width, height]);
 
     return (
       <React.Fragment>
         <PerspectiveCamera
+          key={key}
           makeDefault
           ref={refCamera}
           position={startCameraPosition}
-          args={[60, window.innerWidth / window.innerHeight, 1, 2000]}
+          args={args}
         />
         <OrbitControls
           ref={refOrbitControls}

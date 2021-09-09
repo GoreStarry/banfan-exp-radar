@@ -51,10 +51,6 @@ const FanIcon = ({ index, className, point, setPoint, isAnimationDone }) => {
     );
   }, []);
 
-  // const onTouchMove = useCallback((e) => {
-  //   console.log(e.touches[0].clientX - refFanIconLeft.current);
-  // }, []);
-
   return (
     <div
       ref={refFanIcon}

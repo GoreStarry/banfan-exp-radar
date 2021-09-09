@@ -9,14 +9,13 @@ import * as THREE from "three";
 import PropTypes from "prop-types";
 import { Canvas, useThree, extend } from "@react-three/fiber";
 // import * as THREE from "three";
-import _ from "lodash";
 import cx from "classnames";
 import { a, useSpring } from "react-spring/three";
 // import { Effects } from "@react-three/drei";
 // import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
 // import { FXAAShader } from "three/examples/jsm/shaders/FXAAShader";
 
-import useStore from "../store/useStore.js";
+// import useStore from "../store/useStore.js";
 
 import BgClickOut from "../components/BgClickOut";
 import AbilityPlate from "../components/AbilityPlate";
@@ -115,8 +114,6 @@ const ThreeRadarChart = ({
   }, []);
 
   const numAbility = data.length < 3 ? 3 : data.length;
-
-  const defaultGroupPosition = useMemo(() => [0, -0.5, 0], []);
 
   return (
     <div
