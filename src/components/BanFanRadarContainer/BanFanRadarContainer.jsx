@@ -167,6 +167,7 @@ const BanFanRadarContainer = ({
 
   const saveImage = useCallback(() => {
     html2canvas(refContainer.current, {
+      scale: window.devicePixelRatio * 2,
       useCORS: true,
     }).then(function (canvas) {
       // document.body.appendChild(canvas);
