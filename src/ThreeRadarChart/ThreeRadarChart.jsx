@@ -126,7 +126,7 @@ const ThreeRadarChart = ({
         alpha
         gl={{ preserveDrawingBuffer: true }}
         onCreated={({ camera, gl, scene, viewport }) => {
-          gl.setPixelRatio(window.devicePixelRatio || 2);
+          gl.setPixelRatio(window.devicePixelRatio * 2 || 2);
           refCanvas.current = gl.domElement;
           if (canvasBgColor && canvasBgColor !== "transparent") {
             scene.background = new THREE.Color(canvasBgColor);
