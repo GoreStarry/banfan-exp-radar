@@ -39,9 +39,13 @@ $vw-viewport: 1080;
   h3 {
     font-size: get-vw(40px);
     color: #aac3e0;
-    line-height: get-vw(56px);
+    line-height: get-vw(60px);
   }
   span {
+    font-size: 1em;
+    color: white;
+    // color: hsl(20, 100%, 84%);
+    font-style: italic;
   }
   h1 {
     font-size: get-vw(70px);

@@ -210,7 +210,7 @@ const FanSlider = ({
   return (
     <>
       <header className={sty.header}>
-        <h3> {`${user_name ? user_name + " " : "我"}的體驗雷達`}</h3>
+        <h3>{user_name ? <span>{`${user_name} `}</span> : "我"}的體驗雷達</h3>
         <h1>{name}</h1>
       </header>
 
@@ -250,7 +250,7 @@ const FanSlider = ({
             ))}
           </a.div>
           {isOpen && !!point && (
-            <span className={sty.span__point}> / {point}</span>
+            <span className={sty.span__point}>{` /  ${point}`}</span>
           )}
         </div>
         <div id="hint" className={sty.bubble}>
