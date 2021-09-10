@@ -51,7 +51,7 @@ const BanFanRadarContainer = ({
     () => ({
       3: { scale: 1.5, finScale: 1.65, position: [0, -0.8, 0] },
       4: { scale: 1.35, finScale: 1.45, position: [0, -0.3, 0] },
-      5: { scale: 1.35, finScale: 1.45, position: [0, -0.5, 0] },
+      5: { scale: 1.45, finScale: 1.45, position: [0, -0.6, 0] },
       6: { scale: 1.35, finScale: 1.45, position: [0, -0.3, 0] },
       7: { scale: 1.35, finScale: 1.45, position: [0, -0.5, 0] },
       8: { scale: 1.35, finScale: 1.45, position: [0, -0.3, 0] },
@@ -166,7 +166,9 @@ const BanFanRadarContainer = ({
   }, []);
 
   const saveImage = useCallback(() => {
-    html2canvas(refContainer.current, { scale: 2 }).then(function (canvas) {
+    html2canvas(refContainer.current, {
+      useCORS: true,
+    }).then(function (canvas) {
       // document.body.appendChild(canvas);
       if (isIOS) {
         Alert("iOS 請長壓圖片，加入「照片」");
