@@ -14,6 +14,7 @@ import canvasToImage from "canvas-to-image";
 import { isIOS } from "react-device-detect";
 import * as THREE from "three";
 import axios from "axios";
+import { Prompt, Alert } from "react-st-modal";
 
 import sty from "./BanFanRadarContainer.module.scss";
 
@@ -169,7 +170,7 @@ const BanFanRadarContainer = ({
     html2canvas(refContainer.current, { scale: 2 }).then(function (canvas) {
       // document.body.appendChild(canvas);
       if (isIOS) {
-        alert("iOS 請長壓圖片，加入「照片」");
+        Alert("iOS 請長壓圖片，加入「照片」");
         setSavedImgDataURL(canvas.toDataURL("image/jpeg", 1.0));
         setIsSaveImageMode(true);
       } else {
@@ -190,10 +191,11 @@ const BanFanRadarContainer = ({
     setIsTriggerSaveImage(false);
   }, []);
 
-  const completeExperience = useCallback(() => {
+  const completeExperience = useCallback(async () => {
     let name;
     if (!user_name) {
-      name = prompt("暱稱：(選填)", user_name);
+      name = await Prompt("暱稱：(選填)", "Сonfirmation title");
+      // name = prompt("暱稱：(選填)", user_name);
       setUserName(name);
     }
     setIsFinalScoreMode(true);
