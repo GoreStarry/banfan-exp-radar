@@ -175,7 +175,7 @@ const BanFanRadarContainer = ({
       } else {
         // setSavedImgDataURL(canvas.toDataURL("image/jpeg", 1.0));
         canvasToImage(canvas, {
-          name: "myImage",
+          name: `${gameName} - 體驗雷達`,
           type: "jpg",
           quality: 1,
         });
@@ -184,7 +184,7 @@ const BanFanRadarContainer = ({
     // html2pdf(refContainer.current);
 
     // setIsTriggerSaveImage(true);
-  }, []);
+  }, [gameName]);
 
   const onCompleteSaveImage = useCallback(() => {
     setIsTriggerSaveImage(false);
