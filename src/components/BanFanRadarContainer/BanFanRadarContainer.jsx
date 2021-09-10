@@ -98,7 +98,7 @@ const BanFanRadarContainer = ({
 
   useEffect(() => {
     const { position, scale } = radarPositionMap[data.length];
-    console.log(position);
+
     setRadarStyles({
       scale,
       position,
@@ -166,7 +166,6 @@ const BanFanRadarContainer = ({
   }, []);
 
   const saveImage = useCallback(() => {
-    console.log(refContainer.current);
     html2canvas(refContainer.current, { scale: 2 }).then(function (canvas) {
       // document.body.appendChild(canvas);
       if (isIOS) {

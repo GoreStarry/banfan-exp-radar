@@ -81,8 +81,6 @@ const FanSlider = ({
   }, [coverWidth, coverHeight]);
 
   const handleChangePoint = useCallback((val) => {
-    console.log(refIsFadeInDone.current);
-
     if (refIsFadeInDone.current) {
       if (refTimeline.current) {
         isRefAlreadyEdit.current = true;
@@ -141,7 +139,6 @@ const FanSlider = ({
           stagger: { amount: 0.4, repeat: -1, yoyo: true },
           ease: "power1.out",
           onStart: () => {
-            console.log("onStart");
             refIsFadeInDone.current = true;
             setIsAnimationDone(true);
           },
