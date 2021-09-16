@@ -48,7 +48,8 @@ $vw-viewport: 1080;
     font-style: italic;
   }
   h1 {
-    font-size: get-vw(70px);
+    white-space: nowrap;
+    font-size: get-vw(63px);
     line-height: get-vw(98px);
     color: #ebe7e1;
     font-weight: 500;
