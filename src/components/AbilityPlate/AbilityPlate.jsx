@@ -83,6 +83,9 @@ const AbilityPlate = React.memo(
     );
 
     useEffect(() => {
+      if (refShapePoints.current.length > data.length) {
+        refShapePoints.current.length = data.length;
+      }
       animateTransition(data);
       return () => {};
     }, [data, animateTransition]);
