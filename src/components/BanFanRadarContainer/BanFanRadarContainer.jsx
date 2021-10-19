@@ -11,10 +11,11 @@ import cx from "classnames";
 import useStore from "../../store/useStore";
 import html2canvas from "html2canvas";
 import canvasToImage from "canvas-to-image";
-import { isIOS } from "react-device-detect";
+import { isIOS, isAndroid } from "react-device-detect";
 import * as THREE from "three";
 import axios from "axios";
 import { Prompt, Alert } from "react-st-modal";
+import shallow from "zustand/shallow";
 
 import sty from "./BanFanRadarContainer.module.scss";
 
@@ -59,6 +60,16 @@ const BanFanRadarContainer = ({
     []
   );
 
+  const { focusPointIndex } = useStore(
+    useCallback(
+      (state) => ({
+        focusPointIndex: state.focusPointIndex,
+      }),
+      []
+    ),
+    shallow
+  );
+
   const [radarStyles, setRadarStyles] = useState({
     scale: radarPositionMap[data?.length]?.scale,
     position: radarPositionMap[data?.length]?.position,
@@ -93,6 +104,21 @@ const BanFanRadarContainer = ({
       .catch((err) => {
         alert("好像沒這桌耶...？？？");
       });
+
+    if (isAndroid) {
+      setTimeout(
+        () =>
+          document
+            .querySelector("meta[name=viewport]")
+            .setAttribute(
+              "content",
+              "height=" +
+                window.innerHeight * 0.9 +
+                "px, width=device-width, initial-scale=1.0"
+            ),
+        300
+      );
+    }
     return () => {};
   }, []);
 
@@ -105,6 +131,24 @@ const BanFanRadarContainer = ({
     });
     return () => {};
   }, [data.length]);
+
+  useEffect(() => {
+    if (isAndroid) {
+      const { position, scale } = radarPositionMap[data.length];
+      if (focusPointIndex) {
+        setRadarStyles({
+          scale,
+          position: [position[0], position[1] + 0.5, position[2]],
+        });
+      } else {
+        setRadarStyles({
+          scale,
+          position,
+        });
+      }
+    }
+    return () => {};
+  }, [focusPointIndex]);
 
   useEffect(() => {
     if (isFinalScoreMode) {
@@ -204,7 +248,10 @@ const BanFanRadarContainer = ({
   }, [user_name]);
 
   return (
-    <div className={sty.BanfanRadar}>
+    <div
+      className={sty.BanfanRadar}
+      style={isAndroid ? { "--size": "100vw" } : {}}
+    >
       {savedImgDataURL ? (
         <img src={savedImgDataURL} alt={gameName} className={sty.img__saved} />
       ) : (

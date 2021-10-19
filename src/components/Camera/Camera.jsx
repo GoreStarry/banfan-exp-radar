@@ -11,6 +11,7 @@ import { PerspectiveCamera, OrbitControls } from "@react-three/drei";
 import Two from "two.js";
 import shallow from "zustand/shallow";
 import { useWindowSize } from "react-use";
+import { isAndroid } from "react-device-detect";
 
 import useStore from "../../store/useStore.js";
 import useResetCamera from "./useResetCamera.js";
@@ -35,6 +36,7 @@ const Camera = React.memo(
     const didMount = useRef(false);
     const refOrbitControls = useRef(null);
     const { width, height } = useWindowSize();
+    const refPerspectiveCameraCache = useRef();
     // const defaultCameraPosition = [-8, 8, 6]
 
     const { isClickOutLabel, isResetCamera, focusPointIndex } = useStore(
@@ -102,6 +104,19 @@ const Camera = React.memo(
       });
     }, [numAbility, lengthRadius]);
 
+    const { key, args } = useMemo(() => {
+      if (!didMount.current || !isAndroid) {
+        const setting = {
+          key: width * height,
+          args: [60, width / height, 1, 2000],
+        };
+        refPerspectiveCameraCache.current = setting;
+        return setting;
+      } else {
+        return refPerspectiveCameraCache.current;
+      }
+    }, [width, height]);
+
     useEffect(() => {
       // console.log(focusPointIndex, listFocusPointPositionList);
       if (!didMount.current) {
@@ -115,10 +130,6 @@ const Camera = React.memo(
       }
       return () => {};
     }, [focusPointIndex, listFocusPointPositionList, resetCamera]);
-
-    const { key, args } = useMemo(() => {
-      return { key: width * height, args: [60, width / height, 1, 2000] };
-    }, [width, height]);
 
     return (
       <React.Fragment>
