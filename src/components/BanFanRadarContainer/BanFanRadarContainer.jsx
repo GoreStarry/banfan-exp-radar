@@ -24,6 +24,12 @@ import useResizeContainerSize from "../../hooks/useResizeContainerSize";
 import ThreeRadarChart from "../../ThreeRadarChart";
 import FanSlider from "../FanSlider";
 import BgBlurCanvas from "../BgBlurCanvas";
+import {
+  saveLabelToLocalStorage,
+  getLabelFromLocalStorage,
+  getUserName,
+  saveUserName,
+} from "./localStorageHandler.js";
 
 import "css-reset-and-normalize/css/reset-and-normalize.min.css";
 import "css-reset-and-normalize/css/button-reset.min.css";
@@ -41,7 +47,7 @@ const BanFanRadarContainer = ({
   const [savedImgDataURL, setSavedImgDataURL] = useState();
 
   const refContainer = useRef();
-  const [data, setData] = useState(dataInit);
+  const [data, setData] = useState(getLabelFromLocalStorage() || dataInit);
   const [isTriggerSaveImage, setIsTriggerSaveImage] = useState(false);
   const [isFinalScoreMode, setIsFinalScoreMode] = useState(false);
   const [user_name, setUserName] = useState("");
@@ -204,8 +210,8 @@ const BanFanRadarContainer = ({
   }, []);
 
   const addDataItem = useCallback(() => {
-    setData((prevData) => {
-      return [...prevData, { name: "", value: 0.5 }];
+    setData(([data1, ...prevData]) => {
+      return [data1, { name: "", value: 0.5 }, ...prevData];
     });
   }, []);
 
@@ -238,11 +244,18 @@ const BanFanRadarContainer = ({
   }, []);
 
   const completeExperience = useCallback(async () => {
+    setData((prev) => {
+      saveLabelToLocalStorage(prev);
+      return prev;
+    });
     let name;
     if (!user_name) {
-      name = await Prompt("暱稱：(選填)", "Сonfirmation title");
+      name = await Prompt("暱稱：(選填)", {
+        defaultValue: getUserName(),
+      });
       // name = prompt("暱稱：(選填)", user_name);
-      setUserName(name);
+      saveUserName(name);
+      name && setUserName(name);
     }
     setIsFinalScoreMode(true);
   }, [user_name]);
