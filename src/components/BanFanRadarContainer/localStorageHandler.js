@@ -25,5 +25,5 @@ export function saveUserName(name) {
 }
 
 export function getUserName() {
-  return localStorage.getItem(name_key);
+  return localStorage.getItem(name_key) || "";
 }
