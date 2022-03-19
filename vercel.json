@@ -1,0 +1,11 @@
+{
+  "routes": [
+    {
+      "src": "/api/corsAnywhere(.*)",
+      "dest": "/api/corsAnywhere.js"
+    },
+    {
+      "handle": "filesystem"
+    }
+  ]
+}
