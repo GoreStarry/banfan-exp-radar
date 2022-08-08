@@ -10,7 +10,7 @@ import PropTypes from "prop-types";
 import { Canvas, useThree, extend } from "@react-three/fiber";
 // import * as THREE from "three";
 import cx from "classnames";
-import { a, useSpring } from "react-spring/three";
+import { a, useSpring } from "@react-spring/three";
 // import { Effects } from "@react-three/drei";
 // import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
 // import { FXAAShader } from "three/examples/jsm/shaders/FXAAShader";

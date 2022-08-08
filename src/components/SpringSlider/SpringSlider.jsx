@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import PropTypes from "prop-types";
 import { a, useSpring } from "react-spring";
-import { useDrag } from "react-use-gesture";
+import { useDrag, useGesture } from "@use-gesture/react";
 import gsap from "gsap";
 import cx from "classnames";
 
@@ -62,36 +62,40 @@ const SpringSlider = ({
     return { scale: mapRange(minValue, maxValue, 0, 3.5, value) };
   }, [value]);
 
-  const bind = useDrag(
-    (state) => {
-      const {
-        movement: [mx],
-        event,
-        // down,
-        // swipe, // [swipeX, swipeY] 0 if no swipe detected, -1 or 1 otherwise
-        // tap, // is the drag assimilated to a tap
-      } = state;
+  const bind = useGesture(
+    {
+      onPointerDown: ({ event }) => {
+        event.stopPropagation();
+      },
+      onDrag: (state) => {
+        const {
+          offset: [ox],
 
-      event.preventDefault();
-      event.stopPropagation();
+          event,
+          // down,
+          // swipe, // [swipeX, swipeY] 0 if no swipe detected, -1 or 1 otherwise
+          // tap, // is the drag assimilated to a tap
+        } = state;
 
-      const barWidth = refBar.current.offsetWidth;
+        event.preventDefault();
+        event.stopPropagation();
 
-      const clampValue = clamp(0, barWidth, mx);
+        const barWidth = refBar.current.offsetWidth;
 
-      // console.log(clampValue);
+        const clampValue = clamp(0, barWidth, ox);
 
-      onChange(
-        snapValue(mapRange(0, barWidth, minValue, maxValue, clampValue)),
-        index
-      );
-      setThumbDotSpring(() => {
-        return {
-          x: clampValue,
-        };
-      });
+        onChange(
+          snapValue(mapRange(0, barWidth, minValue, maxValue, clampValue)),
+          index
+        );
+        setThumbDotSpring(() => {
+          return {
+            x: clampValue,
+          };
+        });
+      },
     },
-    { axis: "x", initial: () => [thumbDotSpringProps.x.get(), 0] }
+    { drag: { axis: "x", from: () => [thumbDotSpringProps.x.get(), 0] } }
   );
 
   return (
