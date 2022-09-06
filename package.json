@@ -31,6 +31,7 @@
     "@react-three/drei": "9.19.7",
     "@react-three/fiber": "8.3.0",
     "@use-gesture/react": "^10.2.17",
+    "auto-text-size": "^0.1.2",
     "axios": "^0.27.2",
     "bgbf-bgg-search": "board-game-ban-fan/bgbf-bgg-search",
     "canvas-to-image": "^2.2.0",

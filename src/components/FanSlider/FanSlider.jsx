@@ -9,6 +9,8 @@ import PropTypes from "prop-types";
 import gsap from "gsap";
 import { a, useSpring } from "react-spring";
 import useObjectFit from "react-use-object-fit";
+import { AutoTextSize } from "auto-text-size";
+import cx from "classnames";
 
 import sty from "./FanSlider.module.scss";
 import FanIcon from "./FanIcon";
@@ -207,11 +209,27 @@ const FanSlider = ({
     }
   );
 
+  const isCHT = useMemo(() => name.match(/[\u4E00-\u9FFF]/) && true, [name]);
+
+  const vmin = useMemo(() => {
+    return window.innerWidth > window.innerHeight
+      ? window.innerHeight / 100
+      : window.innerWidth / 100;
+  }, []);
+
+  console.log(vmin);
+
   return (
     <>
       <header className={sty.header}>
         <h3>{user_name ? <span>{`${user_name} `}</span> : "我"}的體驗雷達</h3>
-        <h1>{name}</h1>
+        <h1
+          className={cx(sty.h1, {
+            [sty.h1__cht]: isCHT,
+          })}
+        >
+          <AutoTextSize maxFontSizePx={5.8 * vmin}>{name}</AutoTextSize>
+        </h1>
       </header>
 
       <div ref={refCoverContainer} className={sty.container__cover}>

@@ -35,6 +35,8 @@ import "css-reset-and-normalize/css/reset-and-normalize.min.css";
 import "css-reset-and-normalize/css/button-reset.min.css";
 
 const BanFanRadarContainer = ({
+  gameName = "Loading...",
+  imgUrlGameCover,
   data: dataInit = [
     { name: "美術", value: 3 },
     { name: "策略？", value: 3 },
@@ -42,8 +44,6 @@ const BanFanRadarContainer = ({
   ],
   ...args
 }) => {
-  const [imgUrlGameCover, setImgUrlGameCover] = useState();
-  const [gameName, setGameName] = useState("Loading...");
   const [savedImgDataURL, setSavedImgDataURL] = useState();
 
   const refContainer = useRef();
@@ -81,10 +81,8 @@ const BanFanRadarContainer = ({
     position: radarPositionMap[data?.length]?.position,
   });
 
-  const {
-    width: containerWidth,
-    height: containerHeight,
-  } = useResizeContainerSize(refContainer);
+  const { width: containerWidth, height: containerHeight } =
+    useResizeContainerSize(refContainer);
   const spriteMaterialColor = useMemo(() => new THREE.Color(10, 10, 10), []);
 
   const [maxValue, setMaxValue] = useState(5);
@@ -93,23 +91,23 @@ const BanFanRadarContainer = ({
   }, []);
 
   useEffect(() => {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const gameID = urlParams.get("id");
+    // const queryString = window.location.search;
+    // const urlParams = new URLSearchParams(queryString);
+    // const gameID = urlParams.get("id");
 
     refContainer.current.addEventListener("touchmove", function (e) {
       e.preventDefault();
     });
 
-    axios
-      .get(`https://slides-together.vercel.app/api/getRadarTopic?id=${gameID}`)
-      .then(({ data: { name, imgUrl } }) => {
-        setImgUrlGameCover(imgUrl);
-        setGameName(name);
-      })
-      .catch((err) => {
-        alert("好像沒這桌耶...？？？");
-      });
+    // axios
+    //   .get(`https://slides-together.vercel.app/api/getRadarTopic?id=${gameID}`)
+    //   .then(({ data: { name, imgUrl } }) => {
+    //     setImgUrlGameCover(imgUrl);
+    //     setGameName(name);
+    //   })
+    //   .catch((err) => {
+    //     alert("好像沒這桌耶...？？？");
+    //   });
 
     if (isAndroid) {
       setTimeout(

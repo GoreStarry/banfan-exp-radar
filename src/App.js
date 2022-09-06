@@ -1,14 +1,98 @@
-import React, { useState } from "react";
-import * as Components from "./lib.js";
+import React, {
+  useRef,
+  useState,
+  useMemo,
+  useCallback,
+  useEffect,
+} from "react";
+
+import axios from "axios";
+import bggXmlApiClient from "bgg-xml-api-client";
+
+import BGGInputContainer from "./components/BGGInputContainer";
 import BanFanRadarContainer from "./components/BanFanRadarContainer";
-// import BggSearchInput from "bgbf-bgg-search";
+import translateCHT, { testCHS } from "./utils/translateCHT";
 
 // ?id=4DcP0jS4KgeA0jbacbd0W1
 function App() {
-  const [isChoiseGame, setIsChoiseGame] = useState(false);
+  const [isNoGameTarget, setIsNoGameTarget] = useState();
+  const [imgUrlGameCover, setImgUrlGameCover] = useState();
+  const [gameName, setGameName] = useState();
+
+  useEffect(() => {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const bggID = urlParams.get("bggID");
+    const contentfulID = urlParams.get("id");
+
+    if (bggID) {
+      getDataFromBgg(bggID);
+    } else if (contentfulID) {
+      getDataFromContentful(contentfulID);
+    } else {
+      setIsNoGameTarget(true);
+    }
+
+    return () => {};
+  }, []);
+
+  const getDataFromBgg = useCallback(async (id) => {
+    try {
+      const {
+        data: { item: data },
+      } = await bggXmlApiClient.get("thing", {
+        id,
+        type: "boardgame,boardgameexpansion",
+      });
+
+      setBggData(data);
+    } catch (error) {
+      console.log(error);
+      alert("好像沒這桌耶...？？？");
+    }
+  }, []);
+
+  const setBggData = useCallback((data) => {
+    setImgUrlGameCover(`/api/corsAnywhere/${data.image}`);
+    setGameName(
+      data.name.length
+        ? translateCHT(
+            data.name.find(({ value }) => {
+              return (
+                !value.match(/[\u3041-\u30FF]/) && //日文
+                value.match(/[\u4E00-\u9FFF]/) && //中文（含簡體）
+                !testCHS(value) // 不含簡體
+              );
+            })?.value
+          ) || data.name[0].value
+        : data.name.value
+    );
+  }, []);
+
+  const getDataFromContentful = useCallback((id) => {
+    axios
+      .get(`https://slides-together.vercel.app/api/getRadarTopic?id=${id}`)
+      .then(({ data: { name, imgUrl } }) => {
+        setImgUrlGameCover(imgUrl);
+        setGameName(name);
+      })
+      .catch((err) => {
+        alert("好像沒這桌耶...？？？");
+      });
+  }, []);
+
   return (
     <div className="App">
-      <BanFanRadarContainer />
+      {isNoGameTarget && !gameName && (
+        <BGGInputContainer setBggData={setBggData} />
+      )}
+
+      {gameName && (
+        <BanFanRadarContainer
+          imgUrlGameCover={imgUrlGameCover}
+          gameName={gameName}
+        />
+      )}
     </div>
   );
 }
