@@ -217,8 +217,6 @@ const FanSlider = ({
       : window.innerWidth / 100;
   }, []);
 
-  console.log(vmin);
-
   return (
     <>
       <header className={sty.header}>

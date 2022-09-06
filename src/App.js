@@ -55,7 +55,7 @@ function App() {
   const setBggData = useCallback((data) => {
     setImgUrlGameCover(`/api/corsAnywhere/${data.image}`);
     setGameName(
-      data.name.length
+      (data.name.length
         ? translateCHT(
             data.name.find(({ value }) => {
               return (
@@ -66,6 +66,7 @@ function App() {
             })?.value
           ) || data.name[0].value
         : data.name.value
+      ).replace(/&#039;/g, "'") // bgg weird not &#39;
     );
   }, []);
 
