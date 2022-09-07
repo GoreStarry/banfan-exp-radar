@@ -220,7 +220,12 @@ const FanSlider = ({
   return (
     <>
       <header className={sty.header}>
-        <h3>{user_name ? <span>{`${user_name} `}</span> : "我"}的體驗雷達</h3>
+        <img
+          className={sty.img__logo}
+          src={imgLogo}
+          alt="桌遊拌飯"
+          onClick={unLockMaxValueLimit}
+        />
         <h1
           className={cx(sty.h1, {
             [sty.h1__cht]: isCHT,
@@ -272,13 +277,9 @@ const FanSlider = ({
         <div id="hint" className={sty.bubble}>
           你給幾碗飯！
         </div>
-
-        <img
-          className={sty.img__logo}
-          src={imgLogo}
-          alt="桌遊拌飯"
-          onClick={unLockMaxValueLimit}
-        />
+        <h3 className={sty.h3}>
+          {user_name ? <span>{`${user_name} `}</span> : "我"}的體驗雷達
+        </h3>
       </div>
     </>
   );

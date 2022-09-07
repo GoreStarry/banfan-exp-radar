@@ -98,7 +98,7 @@ body {
 .btn__save_img {
   // position: absolute;
   right: get-vw(33px);
-  bottom: 13vmin;
+  // bottom: 13vmin;
 }
 
 // .btn__confirm_radar {
@@ -115,7 +115,7 @@ body {
   position: absolute;
   right: get-vw(25px);
   // bottom: get-vw(140px);
-  top: get-vw(250px);
+  top: get-vw(190px);
   font-size: get-vw(32px);
 }
 
@@ -123,7 +123,7 @@ body {
 .btn__save_img {
   position: absolute;
   right: get-vw(25px);
-  bottom: get-vw(20px);
+  top: get-vw(300px);
   font-size: get-vw(36px);
 }
 
