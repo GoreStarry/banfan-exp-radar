@@ -67,6 +67,10 @@ const EditLabel = React.forwardRef(
       e.stopPropagation();
     }, []);
 
+    const onPointerDownStopPropagation = useCallback((event) => {
+      event.stopPropagation();
+    }, []);
+
     return (
       <Html
         center
@@ -103,6 +107,7 @@ const EditLabel = React.forwardRef(
                 className={sty.btn__delete}
                 data-index={index}
                 onClick={handleDeleteDataItem}
+                onPointerDown={onPointerDownStopPropagation}
               >
                 −
               </button>

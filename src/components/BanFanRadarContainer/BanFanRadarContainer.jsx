@@ -206,6 +206,7 @@ const BanFanRadarContainer = ({
     setData((prevData) => {
       return [...prevData.slice(0, index), ...prevData.slice(index + 1)];
     });
+    useStore.setState({ focusPointIndex: false });
   }, []);
 
   const addDataItem = useCallback(() => {
