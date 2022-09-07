@@ -16,7 +16,7 @@ import * as THREE from "three";
 import axios from "axios";
 import { Prompt, Alert } from "react-st-modal";
 import shallow from "zustand/shallow";
-import ReactGA from "react-ga";
+import ReactGA from "react-ga4";
 
 import sty from "./BanFanRadarContainer.module.scss";
 
@@ -234,8 +234,8 @@ const BanFanRadarContainer = ({
       }
       ReactGA.event({
         category: gameName,
-        action: "Click",
-        label: "Save Image",
+        action: "Save Image",
+        label: gameName,
       });
     });
     // html2pdf(refContainer.current);
@@ -262,7 +262,7 @@ const BanFanRadarContainer = ({
       name && setUserName(name);
     }
     setIsFinalScoreMode(true);
-    ReactGA.event({ category: gameName, action: "Click", label: "Confirm" });
+    ReactGA.event({ category: gameName, action: "Confirm", label: gameName });
   }, [user_name, gameName]);
 
   return (

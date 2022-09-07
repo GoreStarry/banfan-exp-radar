@@ -8,14 +8,14 @@ import React, {
 
 import axios from "axios";
 import bggXmlApiClient from "bgg-xml-api-client";
-import ReactGA from "react-ga";
+import ReactGA from "react-ga4";
 
 import BGGInputContainer from "./components/BGGInputContainer";
 import BanFanRadarContainer from "./components/BanFanRadarContainer";
 import translateCHT, { testCHS } from "./utils/translateCHT";
 
 ReactGA.initialize("G-1SKVN0B57M");
-ReactGA.pageview(window.location.pathname + window.location.search);
+ReactGA.send("pageview");
 
 // ?id=4DcP0jS4KgeA0jbacbd0W1
 function App() {
