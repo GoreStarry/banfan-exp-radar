@@ -219,6 +219,12 @@ const FanSlider = ({
 
   return (
     <>
+      <img
+        className={sty.img__logo}
+        src={imgLogo}
+        alt="桌遊拌飯"
+        onClick={unLockMaxValueLimit}
+      />
       <header className={sty.header}>
         <img
           className={sty.img__logo}

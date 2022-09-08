@@ -42,12 +42,13 @@ $vw-viewport: 1080;
   top: 0;
   width: 100%;
   height: get-vw(220px);
-  padding: get-vw(33px) get-vw(50px) get-vw(33px) get-vw(340px);
+  padding: get-vw(33px) get-vw(40px) get-vw(45px) get-vw(340px);
   background-color: #29313b;
   border-bottom: get-vw(4px) solid #aac3e0;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  justify-content: flex-end;
 }
 
 .h1 {
@@ -85,7 +86,10 @@ $vw-viewport: 1080;
 .img__logo {
   width: get-vw(194px);
   height: auto;
-  margin-top: get-vw(10px);
+  position: absolute;
+  z-index: 3;
+  right: get-vw(40px);
+  top: get-vw(35px);
 }
 
 .img__cover {
