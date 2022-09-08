@@ -42,7 +42,7 @@ $vw-viewport: 1080;
   top: 0;
   width: 100%;
   height: get-vw(220px);
-  padding: get-vw(33px) get-vw(40px) get-vw(45px) get-vw(340px);
+  padding: get-vw(33px) get-vw(33px) get-vw(45px) get-vw(340px);
   background-color: #29313b;
   border-bottom: get-vw(4px) solid #aac3e0;
   display: flex;
@@ -58,14 +58,10 @@ $vw-viewport: 1080;
   font-weight: 500;
   height: get-vw(63px);
   // border: 1px solid red;
-  width: 63vmin;
+  // width: 63vmin;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-}
-
-.h1__cht {
-  width: 58vmin;
 }
 
 .container__cover {
@@ -88,7 +84,7 @@ $vw-viewport: 1080;
   height: auto;
   position: absolute;
   z-index: 3;
-  right: get-vw(40px);
+  right: get-vw(33px);
   top: get-vw(35px);
 }
 

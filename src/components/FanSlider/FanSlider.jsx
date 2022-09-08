@@ -233,9 +233,10 @@ const FanSlider = ({
           onClick={unLockMaxValueLimit}
         />
         <h1
-          className={cx(sty.h1, {
-            [sty.h1__cht]: isCHT,
-          })}
+          className={sty.h1}
+          style={{
+            width: `calc(92vmin - ${coverWidth}px ${isCHT ? "-5vmin" : ""}`,
+          }}
         >
           <AutoTextSize maxFontSizePx={5.8 * vmin}>{name}</AutoTextSize>
         </h1>
