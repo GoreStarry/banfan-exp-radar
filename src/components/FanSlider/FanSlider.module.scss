@@ -52,6 +52,7 @@ $vw-viewport: 1080;
 }
 
 .h1 {
+  max-width: 100%;
   font-size: get-vw(63px);
   line-height: get-vw(90px);
   color: #ebe7e1;
