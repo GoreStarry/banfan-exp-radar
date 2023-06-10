@@ -13,6 +13,7 @@ import ReactGA from "react-ga4";
 import BGGInputContainer from "./components/BGGInputContainer";
 import BanFanRadarContainer from "./components/BanFanRadarContainer";
 import translateCHT, { testCHS } from "./utils/translateCHT";
+import QRRadar from "./components/QRRadar";
 
 ReactGA.initialize("G-1SKVN0B57M");
 ReactGA.send("pageview");
@@ -20,6 +21,7 @@ ReactGA.send("pageview");
 // ?id=4DcP0jS4KgeA0jbacbd0W1
 function App() {
   const [isNoGameTarget, setIsNoGameTarget] = useState();
+  const [isQuickReviewMode, setIsQuickReviewMode] = useState();
   const [imgUrlGameCover, setImgUrlGameCover] = useState();
   const [gameName, setGameName] = useState();
 
@@ -27,12 +29,16 @@ function App() {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const bggID = urlParams.get("bggID");
+    const isQuickReview = urlParams.get("QR");
     const contentfulID = urlParams.get("id");
 
     if (bggID) {
       getDataFromBgg(bggID);
     } else if (contentfulID) {
       getDataFromContentful(contentfulID);
+    }
+    if (isQuickReview) {
+      setIsQuickReviewMode(true);
     } else {
       setIsNoGameTarget(true);
     }
@@ -48,7 +54,6 @@ function App() {
         id,
         type: "boardgame,boardgameexpansion",
       });
-
       setBggData(data);
     } catch (error) {
       console.log(error);
@@ -98,6 +103,8 @@ function App() {
           gameName={gameName}
         />
       )}
+
+      {isQuickReviewMode && <QRRadar />}
     </div>
   );
 }
